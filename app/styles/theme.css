@@ -1,0 +1,131 @@
+@font-face {
+  font-family: CQComic;
+  src: url('/fonts/ZCOOLKuaiLe-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root,
+.cq-theme {
+  color-scheme: light;
+  --background: #f4efdf;
+  --foreground: #15232b;
+  --card: #fffaf0;
+  --card-foreground: #15232b;
+  --popover: #fffaf0;
+  --popover-foreground: #15232b;
+  --primary: #ffdb50;
+  --primary-foreground: #15232b;
+  --secondary: #e3f1e5;
+  --secondary-foreground: #234e43;
+  --muted: #ecebdd;
+  --muted-foreground: #535c60;
+  --accent: #d4f1e7;
+  --accent-foreground: #234e43;
+  --destructive: #9e3d2f;
+  --border: #b2b9a8;
+  --input: #66766b;
+  --ring: #007280;
+  --radius: 0.125rem;
+  --chart-1: #355e48;
+  --chart-2: #c7a559;
+  --chart-3: #879e83;
+  --chart-4: #b97f69;
+  --chart-5: #8199a2;
+  --sidebar: #fdfdf8;
+  --sidebar-foreground: #293e32;
+  --sidebar-primary: #355e48;
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent: #e9eee2;
+  --sidebar-accent-foreground: #355e48;
+  --sidebar-border: #e0e5da;
+  --sidebar-ring: #668663;
+}
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    margin: 0;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: auto;
+  }
+}
+body {
+  font-family:
+    var(--font-geist-sans), 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+}
+::selection {
+  background: #d9e5cb;
+  color: #253c2e;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c6cebf transparent;
+}
+
+:root {
+  --ink: #15232b;
+  --paper: #fff8e8;
+  --cyan: #40c8b8;
+  --coral: #ff8067;
+  --gold: #ffdb50;
+  --cq-frame-line: 4px;
+  --cq-panel-line: 2px;
+  --cq-detail-line: 1px;
+  --cq-quiet-ink: #68796e;
+  --font-comic: CQComic, 'PingFang SC', sans-serif;
+  --cq-motion-press: 100ms;
+  --cq-motion-enter: 180ms;
+  --cq-motion-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './vendor/shadcn-tailwind.css';
+
+/* Import order follows the workspace cascade. */
+@import './styles/theme.css';
+@import './styles/workspace.css';
+@import './styles/live-table.css';
+@import './styles/library.css';
+@import './styles/scenes.css';
+@import './styles/responsive.css';
+@import './styles/motion.css';
+@import './styles/panel-layouts.css';
