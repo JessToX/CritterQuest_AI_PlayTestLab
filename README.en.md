@@ -10,7 +10,7 @@ The original software and UI use the [MIT License](LICENSE). The original game c
 
 The project declares Node.js 22.13.0 as its minimum and requires npm. Installation and local startup were verified on Apple Silicon macOS with Node.js 24.20.0, npm 12.0.2, and Chrome. The first install uses the public npm registry, and initial Geist font processing may contact Google Fonts.
 
-Clone the repository or extract the source, then run these commands from the directory containing `package.json`.
+On the GitHub repository page, choose **Code → Download ZIP** and extract the archive, or clone the repository with Git. Run these commands from the directory containing `package.json`.
 
 ```sh
 npm ci

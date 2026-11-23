@@ -4,7 +4,7 @@ Anyone may use, copy, share, and adapt the original Critter Quest V7.1 game cont
 
 This permission covers the copyrightable expression in the original rulebook text, card and order content, and component and production lists. It also covers that expression where it appears in source code, compiled data snapshots, the interface, or exports. The legal treatment of abstract ideas, methods of play, and purely functional rules follows applicable law. The file-level boundaries are listed in the [license scope](LICENSE-SCOPE.en.md#game-content).
 
-JessToX’s original software and UI, including the interface assets identified in the license scope, are licensed under the [MIT License](LICENSE), Copyright (c) 2026 JessToX. MIT permits commercial use under its terms. Third-party materials remain subject to their [respective licenses](docs/THIRD_PARTY.md).
+JessToX’s original software and UI, including the interface assets identified in the license scope, are licensed under the [MIT License](LICENSE), Copyright (c) 2026 JessToX. MIT permits commercial use under its terms. Third-party materials remain subject to their [respective licenses](docs/THIRD_PARTY.en.md).
 
 ## 中文释义
 
