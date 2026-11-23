@@ -1,5 +1,7 @@
 # 第三方署名
 
+[中文](THIRD_PARTY.md) · [English](THIRD_PARTY.en.md)
+
 ## 随源码提供
 
 - `components/ui/` 中的 `button.tsx`、`checkbox.tsx`、`dialog.tsx`、`input.tsx`、`label.tsx`、`native-select.tsx`、`switch.tsx`、`tabs.tsx` 和 `textarea.tsx`，均可追溯到 shadcn/ui 的 Base UI 模板。候选配置指定 `base-nova`，此前逐文件核对了官方同名模板。保留 shadcn 的 MIT 声明。首次引入所用的上游提交仍未确认。现版下拉的固定来源见下。[上游许可](https://github.com/shadcn-ui/ui/blob/main/LICENSE.md) · [上游组件](https://github.com/shadcn-ui/ui/tree/main/apps/v4/registry/bases/base/ui) · [随附声明](licenses/shadcn-MIT.txt)
@@ -18,11 +20,11 @@
 - `components/ui/dialog.tsx`。Base UI 的对话框组合及插槽对应，项目使用本地按钮、`cn` 和 Lucide X。相较本地首版，项目调整了弹窗动画样式，增加关闭按钮样式并将其无障碍标签改为中文。 Registry 摘要 `40fc321d25eb9590`。[固定 Base 模板](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/apps/v4/registry/bases/base/ui/dialog.tsx) · [Base Nova registry](https://ui.shadcn.com/r/styles/base-nova/dialog.json)
 - `components/ui/tabs.tsx`。Base UI Tabs 和 CVA 样式对应。项目使用本地 `cn`，本地首版之后开始显式传递 `orientation`。 Registry 摘要 `b4552a0329dd9a6e`。[固定 Base 模板](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/apps/v4/registry/bases/base/ui/tabs.tsx) · [Base Nova registry](https://ui.shadcn.com/r/styles/base-nova/tabs.json)
 
-- `app/vendor/shadcn-tailwind.css` 逐字节取自已锁定的 `shadcn@4.23.0` 官方 npm 包中的 `dist/tailwind.css`。SHA-256 为 `4c371f7a1ff5d219ae2f7ff28bd256b4346fd546fe46fbae22092e57db2f0fae`。随附 MIT 原文与该包许可及上游固定提交一致。[官方 npm 版本](https://www.npmjs.com/package/shadcn/v/4.23.0) · [固定上游许可](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/LICENSE.md) · [随附声明](licenses/shadcn-MIT.txt)
+- `app/vendor/shadcn-tailwind.css` 逐字节取自已锁定的 `shadcn@4.23.0` 官方 npm 包中的 `dist/tailwind.css`。SHA-256 为 `4c371f7a1ff5d219ae2f7ff28bd256b4346fd546fe46fbae22092e57db2f0fae`。随附 MIT 原文与该包许可及上游固定提交一致。[官方 npm 版本](https://registry.npmjs.org/shadcn/4.23.0) · [固定上游许可](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/LICENSE.md) · [随附声明](licenses/shadcn-MIT.txt)
 
 ## 从 npm 安装
 
-下表覆盖锁定的直接运行依赖。包内路径相对于各包根目录。开发及传递依赖以 `package-lock.json` 为准，许可全文见对应包或上游。若制作单独构建发行物，请按实际随包源码、字体和图标核对完整声明。
+下表覆盖锁定的直接运行依赖。包内路径相对于各包根目录。开发及传递依赖以 `package-lock.json` 为准，许可全文见对应包或上游。源码 ZIP 未附齐这些依赖的全部许可正文。若制作单独构建发行物，请按实际随包源码、字体和图标核对完整声明。
 
 | npm 包                     | 验证版本 | npm 包声明                  | 包内声明文件           |
 | -------------------------- | -------- | --------------------------- | ---------------------- |

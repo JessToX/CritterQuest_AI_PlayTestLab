@@ -4,6 +4,8 @@
 
 Critter Quest V7.1 is a local workbench for running card-game matches with real AI models, evaluating their play, and exporting reports. Bring your own provider API key to run a real match.
 
+The original software and UI use the [MIT License](LICENSE). The original game content has [separate noncommercial terms](GAME-CONTENT-LICENSE.md).
+
 ## Install and start
 
 The project declares Node.js 22.13.0 as its minimum and requires npm. Installation and local startup were verified on Apple Silicon macOS with Node.js 24.20.0, npm 12.0.2, and Chrome. The first install uses the public npm registry, and initial Geist font processing may contact Google Fonts.
@@ -49,8 +51,8 @@ _The screenshot shows a no-key simulation from an isolated environment._
 
 ## Licenses and attribution
 
-- **Software and UI.** The project’s original code and UI, the confirmed geometric seat artwork, and the site icon are available under the [MIT License](LICENSE), including for commercial use. The copyright notice is `Copyright (c) 2026 JessToX`. See the [license scope](LICENSE-SCOPE.md).
+- **Software and UI.** The project’s original code and UI, the confirmed geometric seat artwork, and the site icon are available under the [MIT License](LICENSE), including for commercial use. The copyright notice is `Copyright (c) 2026 JessToX`. See the [license scope](LICENSE-SCOPE.en.md).
 - **Game content.** Anyone may use, copy, share, and adapt JessToX’s original V7.1 game content for noncommercial purposes. Commercial use requires separate permission from JessToX where authorization is required by law. This covers original rule text, cards, orders, crafting lists, and copies of that expression in source, snapshots, and the UI. See the [game content permission](GAME-CONTENT-LICENSE.md) and [scope](LICENSE-SCOPE.md#游戏内容).
-- **Third-party material.** Fonts, templates, icons, and npm dependencies retain their upstream licenses. See the [third-party notices](docs/THIRD_PARTY.md).
+- **Third-party material.** Fonts, templates, icons, and npm dependencies retain their upstream licenses. See the [third-party notices](docs/THIRD_PARTY.en.md).
 
 Run `npm run check` for the full local checks. For maintenance, see the [architecture notes](docs/ARCHITECTURE.md) and [maintenance guide](docs/MAINTENANCE.md).

@@ -4,6 +4,8 @@
 
 Critter Quest V7.1 是一款在本机用真实 AI 模型运行卡牌对局、测试模型表现并导出报告的工作台。运行真实对局需要你自己的供应商 API Key。
 
+原创软件与 UI 采用 [MIT](LICENSE)，原创游戏内容适用[单独的非商业许可](GAME-CONTENT-LICENSE.md)。
+
 ## 安装与启动
 
 项目声明的最低 Node.js 版本为 22.13.0，另需 npm。安装与本机启动已在 macOS Apple Silicon 上用 Node.js 24.20.0、npm 12.0.2 和 Chrome 验证。首次安装需要访问公共 npm registry，首次处理 Geist 字体可能访问 Google Fonts。

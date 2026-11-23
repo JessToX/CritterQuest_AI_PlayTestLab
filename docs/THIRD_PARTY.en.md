@@ -1,0 +1,43 @@
+# Third-party notices
+
+[中文](THIRD_PARTY.md) · [English](THIRD_PARTY.en.md)
+
+## Included with the source
+
+- `button.tsx`, `checkbox.tsx`, `dialog.tsx`, `input.tsx`, `label.tsx`, `native-select.tsx`, `switch.tsx`, `tabs.tsx`, and `textarea.tsx` in `components/ui/` correspond to shadcn/ui Base UI templates. The project configuration specifies `base-nova`, and the official templates were compared file by file. The shadcn MIT notice is included. The upstream commit used at initial import remains unconfirmed. The currently pinned source for the select is listed below. [Upstream license](https://github.com/shadcn-ui/ui/blob/main/LICENSE.md) · [Upstream components](https://github.com/shadcn-ui/ui/tree/main/apps/v4/registry/bases/base/ui) · [Included notice](licenses/shadcn-MIT.txt)
+- `components/ui/native-select.tsx` is aligned with shadcn’s pinned Base template. The expanded Base Nova classes come from the official registry. This project retains the template’s Lucide ChevronDown and the existing local `cn` alias. The select still uses a native control and the original slots. [Pinned source](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/apps/v4/registry/bases/base/ui/native-select.tsx) · [MIT notice at that commit](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/LICENSE.md) · [Base Nova registry](https://ui.shadcn.com/r/styles/base-nova/native-select.json)
+- `lib/utils.ts` matches the entire earlier official shadcn Base helper after normalizing formatting and retains the shadcn MIT notice. `app/globals.css` imports the shadcn Tailwind stylesheet distributed in this repository. Some components also use `@base-ui/react`. [Pinned helper source](https://github.com/shadcn-ui/ui/blob/86d9b00084affa7010e6c7c7bd410ec62525caac/apps/v4/registry/bases/base/lib/utils.ts) · [MIT notice at that commit](https://github.com/shadcn-ui/ui/blob/86d9b00084affa7010e6c7c7bd410ec62525caac/LICENSE.md)
+- The workbench imports icons from `lucide-react`. The included 1.31.0 notice contains Lucide’s ISC terms and the Feather-derived icons’ MIT terms and Cole Bemis attribution. Icons used by the project, including Check and Minus, appear in the list of derived icons. [Lucide upstream](https://lucide.dev/license) · [Included full notice](licenses/lucide-and-feather.txt)
+- The ZCOOL KuaiLe Chinese font TTF is distributed with its copyright notice and SIL OFL 1.1 text. [Included font license](../public/fonts/ZCOOLKuaiLe-OFL.txt) · [Upstream notice](https://github.com/google/fonts/blob/main/ofl/zcoolkuaile/OFL.txt)
+- Geist and Geist Mono are fetched from Google Fonts. Their SIL OFL 1.1 text and attribution match, so one copy is included for both families. The source package contains the license text, and a build may also contain WOFF2 files. [Included font license](../public/fonts/licenses/Geist-OFL.txt) · [Geist upstream](https://github.com/google/fonts/blob/main/ofl/geist/OFL.txt) · [Geist Mono upstream](https://github.com/google/fonts/blob/main/ofl/geistmono/OFL.txt)
+
+## shadcn templates and stylesheet provenance
+
+On 2026-11-20, the pinned upstream Base templates, the official Base Nova registry content, and the first local versions were compared. The pinned templates establish the upstream correspondence. The record does not identify the shadcn CLI version or upstream commit used at initial import. The shortened hashes below are the first 16 characters of the SHA-256 of the registry JSON retrieved for that comparison.
+
+- `components/ui/button.tsx`. The Base UI button, CVA styles, and slots correspond to the template. The project imports the local `cn` helper and added `data-variant` after its first local version. Registry hash `9ba7e870178813f0`. [Pinned Base template](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/apps/v4/registry/bases/base/ui/button.tsx) · [Base Nova registry](https://ui.shadcn.com/r/styles/base-nova/button.json)
+- `components/ui/checkbox.tsx`. Base UI Root and Indicator and the styles correspond to the template. The first local version used Lucide Check and later added Minus and an indeterminate-state branch. Registry hash `e6df7b595f25a7ee`. [Pinned Base template](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/apps/v4/registry/bases/base/ui/checkbox.tsx) · [Base Nova registry](https://ui.shadcn.com/r/styles/base-nova/checkbox.json)
+- `components/ui/dialog.tsx`. The Base UI dialog structure and slots correspond to the template. The project uses the local button, the `cn` helper, and Lucide X. Since the first local version, the project adjusted the dialog animation, added close button styles, and translated the button’s accessibility label into Chinese. Registry hash `40fc321d25eb9590`. [Pinned Base template](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/apps/v4/registry/bases/base/ui/dialog.tsx) · [Base Nova registry](https://ui.shadcn.com/r/styles/base-nova/dialog.json)
+- `components/ui/tabs.tsx`. Base UI Tabs and CVA styles correspond to the template. The project uses the local `cn` helper and began passing `orientation` explicitly after its first local version. Registry hash `b4552a0329dd9a6e`. [Pinned Base template](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/apps/v4/registry/bases/base/ui/tabs.tsx) · [Base Nova registry](https://ui.shadcn.com/r/styles/base-nova/tabs.json)
+- `app/vendor/shadcn-tailwind.css` is a byte-for-byte copy of `dist/tailwind.css` from the official npm package at `shadcn@4.23.0`. Its SHA-256 is `4c371f7a1ff5d219ae2f7ff28bd256b4346fd546fe46fbae22092e57db2f0fae`. The full MIT text included here matches the package notice and the pinned upstream commit. [Official npm version](https://registry.npmjs.org/shadcn/4.23.0) · [Pinned upstream license](https://github.com/shadcn-ui/ui/blob/f50887ae68d0fdcbfbe86b57be08af94a4c88a68/LICENSE.md) · [Included notice](licenses/shadcn-MIT.txt)
+
+## Installed from npm
+
+Packages installed from npm retain their own licenses. The table lists the locked direct runtime dependencies and notice paths relative to each package root. For development and transitive dependencies, see `package-lock.json` and obtain the full license texts from the corresponding packages or upstream projects. The source ZIP does not include a complete collection of those dependency licenses. For a separate build distribution, verify that the notices cover the source code, fonts, and icons actually shipped.
+
+| npm package                | Verified version | Package license declaration  | Notice file in package                  |
+| -------------------------- | ---------------- | ---------------------------- | --------------------------------------- |
+| `@base-ui/react`           | 1.7.0            | MIT                          | `LICENSE`                               |
+| `class-variance-authority` | 0.7.1            | Apache-2.0                   | `LICENSE`                               |
+| `clsx`                     | 2.1.1            | MIT                          | `license`                               |
+| `docx`                     | 9.7.1            | MIT                          | `LICENSE`                               |
+| `drizzle-orm`              | 0.45.2           | Apache-2.0                   | No separate file listed at package root |
+| `fflate`                   | 0.8.3            | MIT                          | `LICENSE`                               |
+| `lucide-react`             | 1.31.0           | ISC, with Feather MIT notice | `LICENSE`                               |
+| `react`                    | 19.3.1           | MIT                          | `LICENSE`                               |
+| `react-dom`                | 19.3.1           | MIT                          | `LICENSE`                               |
+| `react-server-dom-webpack` | 19.3.1           | MIT                          | `LICENSE`                               |
+| `tailwind-merge`           | 3.6.0            | MIT                          | `LICENSE.md`                            |
+| `tw-animate-css`           | 1.4.0            | MIT                          | `LICENSE`                               |
+| `undici`                   | 7.30.2           | MIT                          | `LICENSE`                               |
+| `vinext`                   | 1.4.6            | MIT                          | `LICENSE`                               |

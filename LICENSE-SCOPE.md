@@ -1,5 +1,7 @@
 # 许可范围
 
+[中文](LICENSE-SCOPE.md) · [English](LICENSE-SCOPE.en.md)
+
 ## 软件和界面
 
 [MIT](LICENSE) 适用于权利方自有的工作台代码和界面，包括引擎实现、存取及导出、模拟与模型接口、交互组件、项目样式和合成测试代码。已确认归属的界面几何资产为 `public/illustrations/seats/seat-{0,1,2,3}-{ready,paused}.png` 与 `public/favicon.png`，采用同一 MIT 许可。版权声明为 `Copyright (c) 2026 JessToX`。
