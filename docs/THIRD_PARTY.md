@@ -26,19 +26,19 @@
 
 下表覆盖锁定的直接运行依赖。包内路径相对于各包根目录。开发及传递依赖以 `package-lock.json` 为准，许可全文见对应包或上游。源码 ZIP 未附齐这些依赖的全部许可正文。若制作单独构建发行物，请按实际随包源码、字体和图标核对完整声明。
 
-| npm 包                     | 验证版本 | npm 包声明                  | 包内声明文件           |
-| -------------------------- | -------- | --------------------------- | ---------------------- |
-| `@base-ui/react`           | 1.7.0    | MIT                         | `LICENSE`              |
-| `class-variance-authority` | 0.7.1    | Apache-2.0                  | `LICENSE`              |
-| `clsx`                     | 2.1.1    | MIT                         | `license`              |
-| `docx`                     | 9.7.1    | MIT                         | `LICENSE`              |
-| `drizzle-orm`              | 0.45.2   | Apache-2.0                  | 包根目录未列出单独文件 |
-| `fflate`                   | 0.8.3    | MIT                         | `LICENSE`              |
-| `lucide-react`             | 1.31.0   | ISC，含 Feather 的 MIT 声明 | `LICENSE`              |
-| `react`                    | 19.3.1   | MIT                         | `LICENSE`              |
-| `react-dom`                | 19.3.1   | MIT                         | `LICENSE`              |
-| `react-server-dom-webpack` | 19.3.1   | MIT                         | `LICENSE`              |
-| `tailwind-merge`           | 3.6.0    | MIT                         | `LICENSE.md`           |
-| `tw-animate-css`           | 1.4.0    | MIT                         | `LICENSE`              |
-| `undici`                   | 7.30.2   | MIT                         | `LICENSE`              |
-| `vinext`                   | 1.4.6    | MIT                         | `LICENSE`              |
+| npm 包                     | 验证版本 | npm 包声明                                                                    | 包内声明文件           |
+| -------------------------- | -------- | ----------------------------------------------------------------------------- | ---------------------- |
+| `@base-ui/react`           | 1.7.0    | MIT                                                                           | `LICENSE`              |
+| `class-variance-authority` | 0.7.1    | Apache-2.0                                                                    | `LICENSE`              |
+| `clsx`                     | 2.1.1    | MIT                                                                           | `license`              |
+| `docx`                     | 9.7.1    | MIT                                                                           | `LICENSE`              |
+| `drizzle-orm`              | 0.45.2   | [Apache-2.0](https://github.com/drizzle-team/drizzle-orm/blob/0.45.2/LICENSE) | 包根目录未列出单独文件 |
+| `fflate`                   | 0.8.3    | MIT                                                                           | `LICENSE`              |
+| `lucide-react`             | 1.31.0   | ISC，含 Feather 的 MIT 声明                                                   | `LICENSE`              |
+| `react`                    | 19.3.1   | MIT                                                                           | `LICENSE`              |
+| `react-dom`                | 19.3.1   | MIT                                                                           | `LICENSE`              |
+| `react-server-dom-webpack` | 19.3.1   | MIT                                                                           | `LICENSE`              |
+| `tailwind-merge`           | 3.6.0    | MIT                                                                           | `LICENSE.md`           |
+| `tw-animate-css`           | 1.4.0    | MIT                                                                           | `LICENSE`              |
+| `undici`                   | 7.30.2   | MIT                                                                           | `LICENSE`              |
+| `vinext`                   | 1.4.6    | MIT                                                                           | `LICENSE`              |

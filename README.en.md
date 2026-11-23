@@ -52,7 +52,7 @@ _The screenshot shows a no-key simulation from an isolated environment._
 ## Licenses and attribution
 
 - **Software and UI.** The project’s original code and UI, the confirmed geometric seat artwork, and the site icon are available under the [MIT License](LICENSE), including for commercial use. The copyright notice is `Copyright (c) 2026 JessToX`. See the [license scope](LICENSE-SCOPE.en.md).
-- **Game content.** Anyone may use, copy, share, and adapt JessToX’s original V7.1 game content for noncommercial purposes. Commercial use requires separate permission from JessToX where authorization is required by law. This covers original rule text, cards, orders, crafting lists, and copies of that expression in source, snapshots, and the UI. See the [game content permission](GAME-CONTENT-LICENSE.md) and [scope](LICENSE-SCOPE.md#游戏内容).
+- **Game content.** Anyone may use, copy, share, and adapt JessToX’s original V7.1 game content for noncommercial purposes. Commercial use requires separate permission from JessToX where authorization is required by law. This covers original rule text, cards, orders, crafting lists, and copies of that expression in source, snapshots, and the UI. See the [game content permission](GAME-CONTENT-LICENSE.md) and [scope](LICENSE-SCOPE.en.md#game-content).
 - **Third-party material.** Fonts, templates, icons, and npm dependencies retain their upstream licenses. See the [third-party notices](docs/THIRD_PARTY.en.md).
 
 Run `npm run check` for the full local checks. For maintenance, see the [architecture notes](docs/ARCHITECTURE.md) and [maintenance guide](docs/MAINTENANCE.md).

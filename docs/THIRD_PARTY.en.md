@@ -25,19 +25,19 @@ On 2026-11-20, the pinned upstream Base templates, the official Base Nova regist
 
 Packages installed from npm retain their own licenses. The table lists the locked direct runtime dependencies and notice paths relative to each package root. For development and transitive dependencies, see `package-lock.json` and obtain the full license texts from the corresponding packages or upstream projects. The source ZIP does not include a complete collection of those dependency licenses. For a separate build distribution, verify that the notices cover the source code, fonts, and icons actually shipped.
 
-| npm package                | Verified version | Package license declaration  | Notice file in package                  |
-| -------------------------- | ---------------- | ---------------------------- | --------------------------------------- |
-| `@base-ui/react`           | 1.7.0            | MIT                          | `LICENSE`                               |
-| `class-variance-authority` | 0.7.1            | Apache-2.0                   | `LICENSE`                               |
-| `clsx`                     | 2.1.1            | MIT                          | `license`                               |
-| `docx`                     | 9.7.1            | MIT                          | `LICENSE`                               |
-| `drizzle-orm`              | 0.45.2           | Apache-2.0                   | No separate file listed at package root |
-| `fflate`                   | 0.8.3            | MIT                          | `LICENSE`                               |
-| `lucide-react`             | 1.31.0           | ISC, with Feather MIT notice | `LICENSE`                               |
-| `react`                    | 19.3.1           | MIT                          | `LICENSE`                               |
-| `react-dom`                | 19.3.1           | MIT                          | `LICENSE`                               |
-| `react-server-dom-webpack` | 19.3.1           | MIT                          | `LICENSE`                               |
-| `tailwind-merge`           | 3.6.0            | MIT                          | `LICENSE.md`                            |
-| `tw-animate-css`           | 1.4.0            | MIT                          | `LICENSE`                               |
-| `undici`                   | 7.30.2           | MIT                          | `LICENSE`                               |
-| `vinext`                   | 1.4.6            | MIT                          | `LICENSE`                               |
+| npm package                | Verified version | Package license declaration                                                   | Notice file in package                  |
+| -------------------------- | ---------------- | ----------------------------------------------------------------------------- | --------------------------------------- |
+| `@base-ui/react`           | 1.7.0            | MIT                                                                           | `LICENSE`                               |
+| `class-variance-authority` | 0.7.1            | Apache-2.0                                                                    | `LICENSE`                               |
+| `clsx`                     | 2.1.1            | MIT                                                                           | `license`                               |
+| `docx`                     | 9.7.1            | MIT                                                                           | `LICENSE`                               |
+| `drizzle-orm`              | 0.45.2           | [Apache-2.0](https://github.com/drizzle-team/drizzle-orm/blob/0.45.2/LICENSE) | No separate file listed at package root |
+| `fflate`                   | 0.8.3            | MIT                                                                           | `LICENSE`                               |
+| `lucide-react`             | 1.31.0           | ISC, with Feather MIT notice                                                  | `LICENSE`                               |
+| `react`                    | 19.3.1           | MIT                                                                           | `LICENSE`                               |
+| `react-dom`                | 19.3.1           | MIT                                                                           | `LICENSE`                               |
+| `react-server-dom-webpack` | 19.3.1           | MIT                                                                           | `LICENSE`                               |
+| `tailwind-merge`           | 3.6.0            | MIT                                                                           | `LICENSE.md`                            |
+| `tw-animate-css`           | 1.4.0            | MIT                                                                           | `LICENSE`                               |
+| `undici`                   | 7.30.2           | MIT                                                                           | `LICENSE`                               |
+| `vinext`                   | 1.4.6            | MIT                                                                           | `LICENSE`                               |
