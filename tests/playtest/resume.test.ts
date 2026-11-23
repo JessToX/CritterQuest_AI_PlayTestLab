@@ -43,7 +43,7 @@ function storage() {
 }
 void test('resume restores historical setup and keys after new setup without mutating it', async () => {
   const rule = { ...BASE_RULE, config: { ...BASE_RULE.config, maxRounds: 1 } };
-  const old = newRecord(original, rule, 1, 'simulation');
+  const old = newRecord(original, rule, 1, 'api');
   old.status = 'paused';
   const current = original.map((s) => ({
     ...s,
@@ -62,7 +62,7 @@ void test('resume restores historical setup and keys after new setup without mut
   const store = storage();
   rememberKeys(original, store);
   rememberKeys(current, store);
-  const restored = restoreHistoricalKeys(resumeSeats(old, current), store);
+  const restored = restoreHistoricalKeys(old, resumeSeats(old, current), store);
   assert.equal(restored[0].profile.model, 'old-model');
   assert.equal(restored[0].profile.customInstructions, 'old instructions');
   assert.equal(restored[0].profile.memoryMode, 'active');
@@ -70,21 +70,26 @@ void test('resume restores historical setup and keys after new setup without mut
   assert.equal(current[0].profile.model, 'new-model');
   assert.equal(current[0].connection.apiKey, 'new-secret');
   assert.equal(JSON.stringify(old).includes('old-secret'), false);
-  const result = await runGame(old, restored, [], {
-    call: simulationCall,
-    save: async () => {},
-    saveMemory: async () => {},
-    onUpdate: () => {},
-    signal: new AbortController().signal,
-    maxCalls: 100,
-    chat: false,
-  });
+  const result = await runGame(
+    { ...old, mode: 'simulation' },
+    resumeSeats({ ...old, mode: 'simulation' }, current),
+    [],
+    {
+      call: simulationCall,
+      save: async () => {},
+      saveMemory: async () => {},
+      onUpdate: () => {},
+      signal: new AbortController().signal,
+      maxCalls: 100,
+      chat: false,
+    },
+  );
   assert.equal(result.id, old.id);
   assert.equal(result.status, 'complete');
   forgetKeys(store);
   assert.ok(
     needsResumeInput(
-      restoreHistoricalKeys(resumeSeats(old, current), store),
+      restoreHistoricalKeys(old, resumeSeats(old, current), store),
       'api',
     ),
   );
@@ -106,8 +111,8 @@ void test('legacy fingerprint restores original endpoint and does not reuse new 
   const store = storage();
   rememberKeys(original, store);
   assert.equal(
-    restoreHistoricalKeys(restored, store)[0].connection.apiKey,
-    'old-secret',
+    restoreHistoricalKeys(old, restored, store)[0].connection.apiKey,
+    '',
   );
 });
 void test('unknown legacy custom endpoint requires explicit input instead of guessing', () => {

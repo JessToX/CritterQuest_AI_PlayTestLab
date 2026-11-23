@@ -27,12 +27,10 @@ import { BASE_RULE } from '@/lib/rules/versions';
 import { useEffect, useRef, useState } from 'react';
 import { initialSeats } from '../playtest/configuration.ts';
 import { useConfiguration } from '../playtest/use-configuration.ts';
+import type { ResumePrompt } from '../playtest/view-types.ts';
 import { useModelContext } from '../playtest/use-model-context.ts';
 export function usePlaytestController() {
-  const [resumePrompt, setResumePrompt] = useState<{
-    game: GameRecord;
-    seats: Seat[];
-  } | null>(null);
+  const [resumePrompt, setResumePrompt] = useState<ResumePrompt>(null);
   const [resumeError, setResumeError] = useState('');
   const [terminateConfirm, setTerminateConfirm] = useState(false);
   const [stopping, setStopping] = useState(false);
@@ -214,11 +212,39 @@ export function usePlaytestController() {
       playerId?: string;
     },
     owner: AbortController | null = null,
+    confirmedSeats?: Seat[],
   ) {
     if (controller.current !== owner || !requireSavedGame()) return;
-    const restored = summarySeats(g, seats, target?.playerId);
+    if (
+      confirmedSeats &&
+      needsResumeInput(
+        confirmedSeats.filter(
+          (_, index) =>
+            !target?.playerId || g.state.players[index]?.id === target.playerId,
+        ),
+        g.mode,
+      )
+    ) {
+      setMessage('请确认 HTTPS 接口并填写对应的 API Key，再补生成总结。');
+      return;
+    }
+    const restored = confirmedSeats || summarySeats(g, seats, target?.playerId);
     if (!restored) {
-      setMessage('补生成总结需要恢复对应 AI 的模型、接口与密钥');
+      if (g.mode === 'api' && !owner) {
+        setResumePrompt({
+          game: g,
+          seats: resumeSeats(g, seats),
+          summary: true,
+          playerId: target?.playerId,
+          confirm: (selected) =>
+            void repairSummaries(g, target, null, selected),
+        });
+        setResumeError('');
+      } else {
+        setMessage(
+          '对局记录已保留。可在报告页补生成总结；如缺少 API Key，按提示重新填写。',
+        );
+      }
       return;
     }
     const abort = new AbortController();
@@ -326,9 +352,13 @@ export function usePlaytestController() {
       selected = resume
         ? suppliedSeats || resumeSeats(resume, seats)
         : seats.filter((s) => s.enabled);
-      if (resume && !suppliedSeats) {
+      if (resume && mode === 'api' && !suppliedSeats) {
         try {
-          selected = restoreHistoricalKeys(selected, window.localStorage);
+          selected = restoreHistoricalKeys(
+            resume,
+            selected,
+            window.localStorage,
+          );
         } catch {
           /* Prompt for missing keys below. */
         }
@@ -338,7 +368,11 @@ export function usePlaytestController() {
       return;
     }
     if (resume && needsResumeInput(selected, mode)) {
-      setResumePrompt({ game: resume, seats: selected });
+      setResumePrompt({
+        game: resume,
+        seats: selected,
+        confirm: (confirmed) => void start(mode, resume, confirmed),
+      });
       setResumeError('');
       return;
     }
@@ -372,10 +406,12 @@ export function usePlaytestController() {
     setMessage('正在准备对局…');
     try {
       if (!resume) await save('profiles', 'profiles', { seats });
-      try {
-        rememberKeys(selected, window.localStorage);
-      } catch {
-        /* Gameplay can continue with an in-memory key. */
+      if (mode === 'api') {
+        try {
+          rememberKeys(selected, window.localStorage);
+        } catch {
+          /* Gameplay can continue with an in-memory key. */
+        }
       }
       await runBatch({
         mode,

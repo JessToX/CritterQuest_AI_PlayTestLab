@@ -50,11 +50,13 @@ void test('summary seats follow historical order and configuration while retaini
 void test('summary repair rejects a missing seat, changed model, changed endpoint or absent API key', () => {
   const game = newRecord(seats.slice(0, 2), BASE_RULE, 1, 'api');
   assert.equal(summarySeats(game, seats.slice(0, 1)), null);
-  for (const change of ['model', 'endpoint', 'key']) {
+  for (const change of ['model', 'endpoint', 'key', 'provider', 'mode']) {
     const current = structuredClone(seats);
     if (change === 'model') current[0].profile.model = 'other';
     if (change === 'endpoint')
       current[0].connection.baseUrl = 'https://other.example';
+    if (change === 'provider') current[0].connection.id = 'other-provider';
+    if (change === 'mode') current[0].connection.kind = 'anthropic';
     if (change === 'key') current[0].connection.apiKey = '';
     assert.equal(summarySeats(game, current), null, change);
   }
@@ -83,4 +85,16 @@ void test('simulation summary repair needs no key and historical records without
   });
   current[0].connection.baseUrl = 'https://other.example';
   assert.ok(summarySeats(game, current));
+});
+
+void test('summary repair requires a complete historical identity for API mode and accepts equivalent endpoints', () => {
+  const game = newRecord(seats.slice(0, 2), BASE_RULE, 1, 'api');
+  const current = structuredClone(seats);
+  current[0].connection.baseUrl += '/';
+  assert.ok(summarySeats(game, current));
+  delete game.seats[0].connection;
+  assert.equal(summarySeats(game, current), null);
+  delete game.seats[0].connectionFingerprint;
+  assert.equal(summarySeats(game, current), null);
+  assert.ok(summarySeats({ ...game, mode: 'simulation' }, current));
 });

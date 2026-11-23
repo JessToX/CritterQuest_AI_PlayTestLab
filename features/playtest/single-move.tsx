@@ -1,5 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import { sameCredentialEndpoint } from '@/lib/agents/provider-endpoint';
 import { PROVIDER_PRESETS } from '@/lib/agents/presets';
 import type { Seat } from '@/lib/playtest/types';
 import { useRef, useState } from 'react';
@@ -26,9 +27,7 @@ export function SingleMove({ seats }: { seats: Seat[] }) {
   const [result, setResult] = useState('');
   const index = seats.findIndex(
     ({ profile, connection }) =>
-      connection.id === deepseek.id &&
-      connection.kind === deepseek.kind &&
-      connection.baseUrl === deepseek.baseUrl &&
+      sameCredentialEndpoint(connection, { ...deepseek, apiKey: '' }) &&
       connection.apiKey.trim() &&
       profile.model.trim(),
   );

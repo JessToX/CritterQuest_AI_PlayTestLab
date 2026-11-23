@@ -31,6 +31,8 @@ Provider presets include OpenAI, Doubao, DeepSeek, Grok / xAI, and Claude / Anth
 
 ## Keys, records, and local use
 
+After updating, you may need to re-enter and save your API keys. Model settings and existing matches are retained. If an older match lacks a verified connection, confirm the endpoint it used before entering that endpoint’s key.
+
 Saving a configuration stores the key in local storage for this address in the current browser. Reopening the same address with that browser can restore it. Clearing site data requires you to enter it again. Use **Clear All Saved Keys (清除所有已保存 Key)** in the seat configuration to remove saved keys. Provider requests use the corresponding key. Keep credentials out of Git, screenshots, reports, and issues. Reports and full records can contain player inputs, strategies, memories, and reflections. Open and review exports before sharing.
 
 Local records are stored in `.wrangler/state` in the project directory. Start from a fresh clone or extraction on first use. The workbench is for one person on their own machine. Keep it on a loopback address and avoid exposing the port to your LAN or the internet. The match-record API has no sign-in or per-user isolation. Anyone who can reach the service can read or modify records.

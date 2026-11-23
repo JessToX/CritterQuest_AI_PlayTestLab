@@ -107,18 +107,21 @@ export async function runBatch(options: RunBatchOptions) {
     const record = resume
       ? {
           ...resume,
-          seats: resume.seats.map((saved, seatIndex) => ({
-            ...saved,
-            connection: {
-              id: seats[seatIndex].connection.id,
-              label: seats[seatIndex].connection.label,
-              kind: seats[seatIndex].connection.kind,
-              baseUrl: seats[seatIndex].connection.baseUrl,
-            },
-            connectionFingerprint: connectionFingerprint(
-              seats[seatIndex].connection,
-            ),
-          })),
+          seats:
+            mode === 'simulation'
+              ? resume.seats
+              : resume.seats.map((saved, seatIndex) => ({
+                  ...saved,
+                  connection: {
+                    id: seats[seatIndex].connection.id,
+                    label: seats[seatIndex].connection.label,
+                    kind: seats[seatIndex].connection.kind,
+                    baseUrl: seats[seatIndex].connection.baseUrl,
+                  },
+                  connectionFingerprint: connectionFingerprint(
+                    seats[seatIndex].connection,
+                  ),
+                })),
         }
       : newRecord(seats, rule, (batchSeed + index) >>> 0, mode, {
           ...experiment,

@@ -3,48 +3,42 @@ import {
   sameCredentialEndpoint,
 } from '../agents/provider-endpoint.ts';
 import type { ProviderConnection } from '../agents/types.ts';
-import { connectionFingerprint } from './experiment.ts';
 import type { GameRecord, Seat } from './types.ts';
 
 // Restore historical configuration without replacing the current setup or copying its key to a different endpoint.
 export function resumeSeats(game: GameRecord, current: Seat[]): Seat[] {
   return game.seats.map((saved) => {
-    const fingerprint = saved.connectionFingerprint;
-    const matching = current.find(
-      (s) =>
-        s.profile.id === saved.id &&
-        (fingerprint
-          ? connectionFingerprint(s.connection) === fingerprint
-          : s.connection.label === saved.provider),
-    );
+    const matching = current.find((seat) => seat.profile.id === saved.id);
+    const historical = saved.connection && { ...saved.connection, apiKey: '' };
     let connection: ProviderConnection;
-    if (saved.connection) connection = { ...saved.connection, apiKey: '' };
-    else if (fingerprint) {
-      const split = fingerprint.indexOf('|'),
-        kind = fingerprint.slice(0, split);
-      if (!['openai', 'anthropic', 'openai-compatible'].includes(kind))
-        throw new Error('旧对局接口信息无法识别');
+    if (historical && credentialEndpoint(historical)) {
+      connection = historical;
+      if (
+        game.mode === 'api' &&
+        matching &&
+        sameCredentialEndpoint(matching.connection, historical)
+      )
+        connection.apiKey = matching.connection.apiKey;
+    } else {
+      const fingerprint = saved.connectionFingerprint ?? '';
+      const split = fingerprint.indexOf('|');
+      const mode = historical?.kind || fingerprint.slice(0, split);
+      const kind =
+        mode === 'openai' || mode === 'anthropic' ? mode : 'openai-compatible';
       connection = {
-        id:
-          matching?.connection.id ||
-          (kind === 'openai-compatible' ? 'custom' : kind),
+        id: historical?.id?.trim()
+          ? historical.id
+          : kind === 'openai-compatible'
+            ? 'custom'
+            : kind,
         label: saved.provider,
-        kind: kind as ProviderConnection['kind'],
-        baseUrl: fingerprint.slice(split + 1),
+        kind,
+        baseUrl:
+          historical?.baseUrl ||
+          (split >= 0 ? fingerprint.slice(split + 1) : ''),
         apiKey: '',
       };
-    } else if (matching && saved.provider !== '自定义兼容 API')
-      connection = { ...matching.connection, apiKey: '' };
-    else
-      connection = {
-        id: 'custom',
-        label: saved.provider,
-        kind: 'openai-compatible',
-        baseUrl: '',
-        apiKey: '',
-      };
-    if (matching && sameCredentialEndpoint(matching.connection, connection))
-      connection.apiKey = matching.connection.apiKey;
+    }
     return {
       enabled: true,
       connection,
@@ -83,15 +77,22 @@ export function summarySeats(
     const targeted = !playerId || game.state.players[index].id === playerId;
     if (
       targeted &&
+      game.mode === 'api' &&
       (seat.profile.model !== saved.model ||
-        (saved.connectionFingerprint &&
-          connectionFingerprint(seat.connection) !==
-            saved.connectionFingerprint) ||
-        (game.mode === 'api' && !seat.connection.apiKey))
+        !saved.connection ||
+        !sameCredentialEndpoint(seat.connection, {
+          ...saved.connection,
+          apiKey: '',
+        }) ||
+        !seat.connection.apiKey.trim())
     )
       return null;
     restored.push({
       ...seat,
+      connection: {
+        ...seat.connection,
+        apiKey: targeted && game.mode === 'api' ? seat.connection.apiKey : '',
+      },
       profile: {
         ...seat.profile,
         name: saved.name,

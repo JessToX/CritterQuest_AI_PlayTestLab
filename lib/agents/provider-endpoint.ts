@@ -36,6 +36,12 @@ export function providerBaseUrl(connection: ProviderConnection) {
 export function credentialEndpoint(
   connection: ProviderConnection,
 ): string | null {
+  if (
+    typeof connection.id !== 'string' ||
+    !connection.id.trim() ||
+    !['openai', 'anthropic', 'openai-compatible'].includes(connection.kind)
+  )
+    return null;
   try {
     return JSON.stringify([
       connection.id,
