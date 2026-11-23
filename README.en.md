@@ -27,7 +27,7 @@ The interface uses Chinese labels. Use the labels in parentheses to find the con
 4. To stop partway through, click **Pause & Save (暂停并保存)**. After refreshing or reopening the same address, click **View & Resume (查看并继续)**, then **Resume Current Match (继续当前对局)**. Re-enter keys for any seats that prompt for one.
 5. Once the completed match is saved, open **Test Reports (测试报告)** and choose **导出当前版本 JSON 报告** for JSON or **导出当前版本 Word** for Word.
 
-Provider presets include OpenAI, Doubao, DeepSeek, Grok / xAI, and Claude / Anthropic. For another OpenAI-compatible service, select **Custom Compatible API (自定义兼容 API)** and enter the provider’s public HTTPS base URL in **API 地址（HTTPS）**. For a Doubao inference endpoint, enter the Endpoint ID from its console in the model ID field. Model availability depends on your provider account.
+Provider presets include OpenAI, Doubao, DeepSeek, Grok / xAI, and Claude / Anthropic. For another OpenAI-compatible service, select **Custom Compatible API (自定义兼容 API)** and enter the provider’s public HTTPS base URL in **API 地址（HTTPS）**. For a Doubao inference endpoint, enter the Endpoint ID from its console in the model ID field. Model availability depends on your provider account. Enter the custom API address before entering its key. If you change the endpoint, enter the key for that endpoint again.
 
 ## Keys, records, and local use
 

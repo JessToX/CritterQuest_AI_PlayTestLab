@@ -1,3 +1,7 @@
+import {
+  credentialEndpoint,
+  sameCredentialEndpoint,
+} from '../agents/provider-endpoint.ts';
 import type { ProviderConnection } from '../agents/types.ts';
 import { connectionFingerprint } from './experiment.ts';
 import type { GameRecord, Seat } from './types.ts';
@@ -39,11 +43,7 @@ export function resumeSeats(game: GameRecord, current: Seat[]): Seat[] {
         baseUrl: '',
         apiKey: '',
       };
-    if (
-      matching &&
-      connectionFingerprint(matching.connection) ===
-        connectionFingerprint(connection)
-    )
+    if (matching && sameCredentialEndpoint(matching.connection, connection))
       connection.apiKey = matching.connection.apiKey;
     return {
       enabled: true,
@@ -64,10 +64,7 @@ export function needsResumeInput(seats: Seat[], mode: GameRecord['mode']) {
   return (
     mode === 'api' &&
     seats.some(
-      (s) =>
-        !s.connection.apiKey.trim() ||
-        (s.connection.kind === 'openai-compatible' &&
-          !s.connection.baseUrl?.trim()),
+      (s) => !s.connection.apiKey.trim() || !credentialEndpoint(s.connection),
     )
   );
 }

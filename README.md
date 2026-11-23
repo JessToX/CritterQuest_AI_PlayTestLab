@@ -25,7 +25,7 @@ npm run local
 4. 中途需要停下时，点 **暂停并保存**。在同一地址重新打开或刷新后，点 **查看并继续**，再点 **继续当前对局**。如果提示缺少 Key，重新填入所需座位的 Key。
 5. 对局结束并显示已保存后，进入 **测试报告**，使用 **导出当前版本 JSON 报告** 或 **导出当前版本 Word**。
 
-供应商预设包括 OpenAI、豆包 / Doubao、DeepSeek、Grok / xAI 和 Claude / Anthropic。其他 OpenAI 兼容服务可选择 **自定义兼容 API**，在 **API 地址（HTTPS）** 填写供应商的公开 HTTPS Base URL。使用豆包推理接入点时，在模型 ID 中填写控制台里的 Endpoint ID。可用模型取决于你的供应商账户。
+供应商预设包括 OpenAI、豆包 / Doubao、DeepSeek、Grok / xAI 和 Claude / Anthropic。其他 OpenAI 兼容服务可选择 **自定义兼容 API**，在 **API 地址（HTTPS）** 填写供应商的公开 HTTPS Base URL。使用豆包推理接入点时，在模型 ID 中填写控制台里的 Endpoint ID。可用模型取决于你的供应商账户。先填自定义地址，再填写对应的 Key。更改接口后需要重新输入 Key。
 
 ## Key、记录与本机使用
 

@@ -1,9 +1,12 @@
 'use client';
+import {
+  editProviderConnection,
+  sameCredentialEndpoint,
+} from '@/lib/agents/provider-endpoint';
 import { apiCall } from '@/lib/client/model-call';
 import { save } from '@/lib/client/records';
 import { rememberKeys } from '@/lib/client/saved-keys';
 import {
-  connectionFingerprint,
   DEFAULT_EXPERIMENT,
   type ExperimentConfig,
   type ExperimentPreset,
@@ -35,7 +38,17 @@ export function useConfiguration(setMessage: Dispatch<SetStateAction<string>>) {
   const savingProfilesRef = useRef(false);
   const update = (index: number, patch: Partial<Seat>) =>
     setSeats((old) =>
-      old.map((s, i) => (i === index ? { ...s, ...patch } : s)),
+      old.map((s, i) =>
+        i === index
+          ? {
+              ...s,
+              ...patch,
+              connection: patch.connection
+                ? editProviderConnection(s.connection, patch.connection)
+                : s.connection,
+            }
+          : s,
+      ),
     );
   async function saveProfiles() {
     if (savingProfilesRef.current) return;
@@ -99,8 +112,10 @@ export function useConfiguration(setMessage: Dispatch<SetStateAction<string>>) {
             seats.find(
               (old) =>
                 old.profile.id === s.profile.id &&
-                connectionFingerprint(old.connection) ===
-                  connectionFingerprint({ ...s.connection, apiKey: '' }),
+                sameCredentialEndpoint(old.connection, {
+                  ...s.connection,
+                  apiKey: '',
+                }),
             )?.connection.apiKey || '',
         },
       })),

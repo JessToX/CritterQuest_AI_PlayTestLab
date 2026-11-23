@@ -7,6 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  credentialEndpoint,
+  editProviderConnection,
+} from '@/lib/agents/provider-endpoint';
 import { Input } from '@/components/ui/input';
 import { needsResumeInput } from '@/lib/playtest/resume';
 import type { Dispatch, SetStateAction } from 'react';
@@ -65,10 +69,10 @@ export function ResumeDialog({
                     n === i
                       ? {
                           ...v,
-                          connection: {
+                          connection: editProviderConnection(v.connection, {
                             ...v.connection,
                             baseUrl: e.target.value,
-                          },
+                          }),
                         }
                       : v,
                   ),
@@ -77,6 +81,7 @@ export function ResumeDialog({
             />
             <Input
               type="password"
+              disabled={!credentialEndpoint(s.connection)}
               autoComplete="off"
               aria-label={s.profile.name + ' API Key'}
               placeholder="填写这个接口对应的 API Key"

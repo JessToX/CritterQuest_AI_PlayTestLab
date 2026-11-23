@@ -1,3 +1,4 @@
+import { credentialEndpoint } from '../agents/provider-endpoint.ts';
 import type { Seat } from '../playtest/types.ts';
 
 const STORAGE_KEY = 'critter-quest-api-keys-v1';
@@ -16,7 +17,7 @@ export function rememberKeys(seats: Seat[], storage: Storage) {
       ? parsed
       : {};
   for (const seat of seats) {
-    if (seat.connection.apiKey.trim())
+    if (credentialEndpoint(seat.connection) && seat.connection.apiKey.trim())
       keys[identity(seat)] = seat.connection.apiKey.trim();
     else delete keys[identity(seat)];
   }
@@ -31,7 +32,10 @@ export function restoreKeys(seats: Seat[], storage: Storage): Seat[] {
     connection: {
       ...seat.connection,
       apiKey:
-        typeof keys[identity(seat)] === 'string' ? keys[identity(seat)] : '',
+        credentialEndpoint(seat.connection) &&
+        typeof keys[identity(seat)] === 'string'
+          ? keys[identity(seat)]
+          : '',
     },
   }));
 }
@@ -42,6 +46,8 @@ export function forgetKeys(storage: Storage) {
 export function restoreHistoricalKeys(seats: Seat[], storage: Storage): Seat[] {
   const keys = JSON.parse(storage.getItem(STORAGE_KEY) || '{}');
   return seats.map((seat) => {
+    if (!credentialEndpoint(seat.connection))
+      return { ...seat, connection: { ...seat.connection, apiKey: '' } };
     if (seat.connection.apiKey.trim()) return seat;
     let key =
       typeof keys[identity(seat)] === 'string' ? keys[identity(seat)] : '';

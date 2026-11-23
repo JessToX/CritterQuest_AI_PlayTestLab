@@ -12,6 +12,7 @@ import {
   readBoundedJson,
   type CompletionBody,
 } from './response.ts';
+import { providerBaseUrl } from './provider-endpoint.ts';
 import { protocols } from './protocols.ts';
 import { validatePublicChatInput, boundPublicOutput } from './public-output.ts';
 import type { ModelSettings, ProviderConnection } from './types.ts';
@@ -258,39 +259,6 @@ export async function requestModel(
   } finally {
     deadline.close();
   }
-}
-
-export function providerBaseUrl(connection: ProviderConnection) {
-  const fixed =
-    connection.kind === 'openai'
-      ? 'https://api.openai.com/v1'
-      : connection.kind === 'anthropic'
-        ? 'https://api.anthropic.com/v1'
-        : connection.baseUrl;
-  let url: URL;
-  try {
-    url = new URL(fixed?.trim() || '');
-  } catch {
-    throw new Error('请输入完整 HTTPS 接口地址，例如 https://zenmux.ai/api/v1');
-  }
-  if (
-    url.protocol !== 'https:' ||
-    url.username ||
-    url.password ||
-    url.search ||
-    url.hash ||
-    /^(localhost|127\.|10\.|192\.168\.|169\.254\.|0\.|\[)/i.test(
-      url.hostname,
-    ) ||
-    /^172\.(1[6-9]|2\d|3[01])\./.test(url.hostname)
-  )
-    throw new Error('API 地址必须是公开 HTTPS 地址');
-  url.pathname = url.pathname
-    .replace(/\/+$/, '')
-    .replace(/\/(models|chat\/completions|responses|messages)$/, '');
-  if (/\/docs(?:\/|$)/i.test(url.pathname))
-    throw new Error('这里填写 API 接口地址，不能填写文档网页地址');
-  return url.toString().replace(/\/$/, '');
 }
 
 export async function listModels(

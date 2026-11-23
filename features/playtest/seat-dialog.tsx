@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { credentialEndpoint } from '@/lib/agents/provider-endpoint';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -147,6 +148,7 @@ export function SeatDialog({
                         <Label htmlFor="key">API Key</Label>
                         <Input
                           id="key"
+                          disabled={!credentialEndpoint(s.connection)}
                           type="password"
                           autoComplete="off"
                           value={s.connection.apiKey}
@@ -183,7 +185,8 @@ export function SeatDialog({
                           <p className="text-sm text-cyan-200">
                             填写供应商的 Base URL；粘贴以 /models 或
                             /chat/completions
-                            结尾的完整接口地址也可自动识别。不要填写文档网页。
+                            结尾的完整接口地址也可自动识别。更改接口后请重新填写对应的
+                            API Key。
                           </p>
                         )}
                         <Label htmlFor="model-list">选择模型</Label>
