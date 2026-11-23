@@ -26,11 +26,12 @@ export function resumeSeats(game: GameRecord, current: Seat[]): Seat[] {
       const kind =
         mode === 'openai' || mode === 'anthropic' ? mode : 'openai-compatible';
       connection = {
-        id: historical?.id?.trim()
-          ? historical.id
-          : kind === 'openai-compatible'
-            ? 'custom'
-            : kind,
+        id:
+          typeof historical?.id === 'string' && historical.id.trim()
+            ? historical.id
+            : kind === 'openai-compatible'
+              ? 'custom'
+              : kind,
         label: saved.provider,
         kind,
         baseUrl:

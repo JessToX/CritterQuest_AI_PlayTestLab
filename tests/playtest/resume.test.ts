@@ -132,3 +132,19 @@ void test('unknown legacy custom endpoint requires explicit input instead of gue
   assert.ok(needsResumeInput(restored, 'api'));
   assert.equal(needsResumeInput(restored, 'simulation'), false);
 });
+
+void test('a malformed historical provider ID requires explicit credentials', () => {
+  const game = newRecord(original, BASE_RULE, 1, 'api');
+  Object.assign(game.seats[0].connection!, { id: 42 });
+  const restored = resumeSeats(game, original);
+  assert.equal(restored[0].connection.id, 'custom');
+  assert.equal(restored[0].connection.baseUrl, original[0].connection.baseUrl);
+  assert.equal(restored[0].connection.apiKey, '');
+  const store = storage();
+  rememberKeys(original, store);
+  assert.equal(
+    restoreHistoricalKeys(game, restored, store)[0].connection.apiKey,
+    '',
+  );
+  assert.equal(needsResumeInput(restored, 'api'), true);
+});
