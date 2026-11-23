@@ -37,6 +37,7 @@ export function usePlaytestController() {
   const [terminateConfirm, setTerminateConfirm] = useState(false);
   const [stopping, setStopping] = useState(false);
   const [unsavedGame, setUnsavedGame] = useState<GameRecord | null>(null);
+  const pendingSave = useRef<GameRecord | null>(null);
   const [retryingSave, setRetryingSave] = useState(false);
   const retryingSaveRef = useRef(false);
   const [games, setGames] = useState<GameRecord[]>([]),
@@ -102,12 +103,24 @@ export function usePlaytestController() {
       .catch((e) => setMessage(String(e.message)));
     return () => controller.current?.abort('page-unload');
   }, [setSeats, setExperimentPresets]);
+  function requireSavedGame() {
+    if (!pendingSave.current) return true;
+    setMessage('请先在实时对局中重试保存，避免丢失当前记录');
+    setTab('live');
+    return false;
+  }
   async function persistGame(g: GameRecord) {
+    if (pendingSave.current && pendingSave.current.id !== g.id)
+      throw new Error('请先重试保存待保存的对局');
     try {
       await save(g.id, 'game', g);
-      setUnsavedGame(null);
+      if (pendingSave.current?.id === g.id) {
+        pendingSave.current = null;
+        setUnsavedGame(null);
+      }
     } catch (e) {
-      setUnsavedGame(structuredClone(g));
+      pendingSave.current = structuredClone(g);
+      setUnsavedGame(pendingSave.current);
       setGames((old) => [
         structuredClone(g),
         ...old.filter((item) => item.id !== g.id),
@@ -137,11 +150,12 @@ export function usePlaytestController() {
     controller.current?.abort('user-pause');
   }
   async function retryUnsavedGame() {
-    if (!unsavedGame || retryingSaveRef.current) return;
+    const pending = pendingSave.current;
+    if (!pending || controller.current || retryingSaveRef.current) return;
     retryingSaveRef.current = true;
     setRetryingSave(true);
     try {
-      await persistGame(unsavedGame);
+      await persistGame(pending);
       setMessage('已重新保存对局');
     } catch {
       setMessage('保存仍失败，请重试');
@@ -173,7 +187,6 @@ export function usePlaytestController() {
   function removeGameFromState(game: GameRecord) {
     setGames((old) => old.filter((candidate) => candidate.id !== game.id));
     setCurrent((selected) => (selected?.id === game.id ? null : selected));
-    setUnsavedGame((unsaved) => (unsaved?.id === game.id ? null : unsaved));
   }
   async function deletePreset(id: string) {
     await removeRecord(id, 'preset');
@@ -200,8 +213,9 @@ export function usePlaytestController() {
       round: number;
       playerId?: string;
     },
+    owner: AbortController | null = null,
   ) {
-    if (controller.current) return;
+    if (controller.current !== owner || !requireSavedGame()) return;
     const restored = summarySeats(g, seats, target?.playerId);
     if (!restored) {
       setMessage('补生成总结需要恢复对应 AI 的模型、接口与密钥');
@@ -232,23 +246,27 @@ export function usePlaytestController() {
     } catch (e) {
       setMessage(e instanceof Error ? e.message : '总结保存失败');
     } finally {
-      controller.current = null;
-      setRunning(false);
-      setSummarizing(false);
+      if (controller.current === abort) {
+        controller.current = owner;
+        if (!owner) setRunning(false);
+        setSummarizing(false);
+      }
     }
   }
   async function terminateGame() {
     setTerminateConfirm(false);
+    if (controller.current) {
+      setStopping(true);
+      setMessage('正在终止并保存…');
+      controller.current.abort('terminate');
+      return;
+    }
+    if (!current || !requireSavedGame()) return;
+    const abort = new AbortController();
+    controller.current = abort;
+    setRunning(true);
     setStopping(true);
     setMessage('正在终止并保存…');
-    if (running) {
-      controller.current?.abort('terminate');
-      return;
-    }
-    if (!current) {
-      setStopping(false);
-      return;
-    }
     const stopped: GameRecord = {
       ...current,
       status: 'terminated',
@@ -261,11 +279,15 @@ export function usePlaytestController() {
     try {
       await persistGame(stopped);
       setMessage('对局已终止并保存，开始收尾总结');
-      await repairSummaries(stopped);
+      await repairSummaries(stopped, undefined, abort);
     } catch {
       setMessage('对局已终止，但保存失败，请重试保存');
     } finally {
-      setStopping(false);
+      if (controller.current === abort) {
+        controller.current = null;
+        setRunning(false);
+        setStopping(false);
+      }
     }
   }
   async function start(
@@ -285,11 +307,7 @@ export function usePlaytestController() {
       setMessage('请先暂停当前对局，再继续另一局');
       return;
     }
-    if (unsavedGame) {
-      setMessage('请先在实时对局中重试保存，避免丢失当前记录');
-      setTab('live');
-      return;
-    }
+    if (!requireSavedGame()) return;
     if (
       !resume &&
       (!Number.isInteger(experiment.memoryBudgetChars) ||
@@ -378,17 +396,16 @@ export function usePlaytestController() {
         onCurrent: setCurrent,
         onGame: upsertGame,
         onMessage: setMessage,
-        onTerminated: async (game) => {
-          controller.current = null;
-          await repairSummaries(game);
-        },
+        onTerminated: (game) => repairSummaries(game, undefined, abort),
       });
     } catch (e) {
       setMessage(e instanceof Error ? e.message : '运行失败');
     } finally {
-      controller.current = null;
-      setRunning(false);
-      setStopping(false);
+      if (controller.current === abort) {
+        controller.current = null;
+        setRunning(false);
+        setStopping(false);
+      }
     }
   }
   const panel = 'cq-panel';

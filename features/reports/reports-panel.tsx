@@ -42,6 +42,7 @@ interface Props {
   running: boolean;
   selectGame: (game: GameRecord) => void;
   stopping: boolean;
+  unsavedGame: GameRecord | null;
   replaceGame: (game: GameRecord) => void;
   removeGameFromState: (game: GameRecord) => void;
   memories: MemoryEntry[];
@@ -57,6 +58,7 @@ export function ReportsPanel({
   running,
   selectGame,
   stopping,
+  unsavedGame,
   replaceGame,
   removeGameFromState,
   memories,
@@ -125,7 +127,7 @@ export function ReportsPanel({
           <ReportBulkActions
             games={visible}
             selected={selected}
-            disabled={running || stopping}
+            disabled={running || stopping || !!unsavedGame}
             deleting={deleting}
             onSelect={setSelectedIds}
             onDelete={deleteReports}
@@ -253,6 +255,7 @@ export function ReportsPanel({
                       disabled={
                         running ||
                         stopping ||
+                        !!unsavedGame ||
                         deleting ||
                         g.status === 'running'
                       }
@@ -262,7 +265,9 @@ export function ReportsPanel({
                     {(g.status === 'complete' || g.status === 'terminated') && (
                       <Button
                         variant="outline"
-                        disabled={running || stopping || deleting}
+                        disabled={
+                          running || stopping || deleting || !!unsavedGame
+                        }
                         onClick={() => void repairSummaries(g)}
                       >
                         补生成总结
