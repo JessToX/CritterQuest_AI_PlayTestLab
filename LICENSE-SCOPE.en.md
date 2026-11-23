@@ -6,6 +6,10 @@
 
 The [MIT License](LICENSE) applies to the original workbench code and UI owned by JessToX, including the engine implementation, storage and export code, simulation and model interfaces, interactive components, project styles, and synthetic test code. It also covers the confirmed original geometric interface assets at `public/illustrations/seats/seat-{0,1,2,3}-{ready,paused}.png` and `public/favicon.png`. The copyright notice is `Copyright (c) 2026 JessToX`.
 
+## Animal character artwork
+
+Jess keeps the animal character designs, originals, revisions, and screenshots depicting them solely on her local machine. They are excluded from the source and distribution packages. All rights to the artwork are reserved. Neither the software MIT license nor the game content license grants any rights to it. No third-party use is authorized.
+
 ## Game content
 
 Anyone may use, copy, share, and adapt original V7.1 game content in which JessToX holds rights for noncommercial purposes. For commercial use, obtain separate permission from JessToX where applicable law requires it. The game content permission covers the original expression identified below and copies of that expression. The software and UI implementation are available under MIT, including for commercial use. Applicable law governs abstract ideas, methods of play, and purely functional rules. See the [full game content permission](GAME-CONTENT-LICENSE.md).

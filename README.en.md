@@ -4,7 +4,7 @@
 
 Critter Quest V7.1 is a local workbench for running card-game matches with real AI models, evaluating their play, and exporting reports. Bring your own provider API key to run a real match.
 
-The original software and UI use the [MIT License](LICENSE). The original game content has [separate noncommercial terms](GAME-CONTENT-LICENSE.md).
+The original software and the included geometric seat markers use the [MIT License](LICENSE). The original game content has [separate noncommercial terms](GAME-CONTENT-LICENSE.md). Jess keeps the animal character designs solely on her local machine. They are excluded from the source package. All rights to those designs are reserved. No third-party use is authorized.
 
 ## Install and start
 

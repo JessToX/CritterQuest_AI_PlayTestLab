@@ -4,7 +4,7 @@
 
 Critter Quest V7.1 是一款在本机用真实 AI 模型运行卡牌对局、测试模型表现并导出报告的工作台。运行真实对局需要你自己的供应商 API Key。
 
-原创软件与 UI 采用 [MIT](LICENSE)，原创游戏内容适用[单独的非商业许可](GAME-CONTENT-LICENSE.md)。
+原创软件与随包的通用几何席位图采用 [MIT](LICENSE)，原创游戏内容适用[单独的非商业许可](GAME-CONTENT-LICENSE.md)。Jess 的动物角色设计仅保存在本机，未随源码提供，全部权利保留。第三方未获任何使用授权。
 
 ## 安装与启动
 
