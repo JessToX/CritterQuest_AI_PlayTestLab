@@ -8,7 +8,7 @@ The original software and the included geometric seat markers use the [MIT Licen
 
 ## Install and start
 
-The project declares Node.js 22.13.0 as its minimum and requires npm. Installation and local startup were verified on Apple Silicon macOS with Node.js 24.20.0, npm 12.0.2, and Chrome. The first install uses the public npm registry, and initial Geist font processing may contact Google Fonts.
+The project declares Node.js 22.13.0 as its minimum and requires npm. Installation and local startup were verified on Apple Silicon macOS with Node.js 24.20.0, npm 12.0.2, and Chrome. If the local npm cache is incomplete, the first `npm ci` run needs internet access to download missing dependencies from the public npm registry.
 
 On the GitHub repository page, choose **Code → Download ZIP** and extract the archive, or clone the repository with Git. Run these commands from the directory containing `package.json`.
 
@@ -17,7 +17,9 @@ npm ci
 npm run local
 ```
 
-The startup command initializes a local database. If prompted to apply D1 migrations, check that the target says `local` before proceeding. Open the address shown in the terminal, normally [http://localhost:3000](http://localhost:3000). Press Ctrl+C in the terminal to stop. On macOS you can also double-click **Start.command** after installing dependencies.
+The startup command initializes a local database. If prompted to apply D1 migrations, check that the target says `local` before proceeding. Open the address shown in the terminal, normally [http://localhost:3000](http://localhost:3000). Press Ctrl+C in the terminal to stop. On macOS you can also double-click **Start.command** after installing dependencies. If double-clicking does not work, run `npm run local` from the project directory in Terminal. You do not need to change macOS security settings.
+
+In development mode, opening or refreshing the workbench may cause the browser to request Geist and Geist Mono from Google Fonts, even during a free simulation without an API key. If the fonts fail to load, the browser uses fallback fonts and you can keep playing.
 
 ## Run your first real AI match
 

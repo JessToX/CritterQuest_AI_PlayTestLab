@@ -8,7 +8,7 @@ Critter Quest V7.1 是一款在本机用真实 AI 模型运行卡牌对局、测
 
 ## 安装与启动
 
-项目声明的最低 Node.js 版本为 22.13.0，另需 npm。安装与本机启动已在 macOS Apple Silicon 上用 Node.js 24.20.0、npm 12.0.2 和 Chrome 验证。首次安装需要访问公共 npm registry，首次处理 Geist 字体可能访问 Google Fonts。
+项目声明的最低 Node.js 版本为 22.13.0，另需 npm。安装与本机启动已在 macOS Apple Silicon 上用 Node.js 24.20.0、npm 12.0.2 和 Chrome 验证。首次运行 `npm ci` 时，如果本机的 npm 缓存不完整，就需要联网从公共 npm registry 下载缺少的依赖。
 
 在 GitHub 仓库页选择 **Code → Download ZIP** 并解压，或用 Git 克隆仓库。在含有 `package.json` 的目录运行：
 
@@ -17,7 +17,9 @@ npm ci
 npm run local
 ```
 
-启动命令会初始化本地数据库。若终端询问是否应用 D1 迁移，确认目标显示为 `local` 后继续。打开终端显示的地址，默认是 [http://localhost:3000](http://localhost:3000)。结束时在终端按 Ctrl+C。macOS 用户安装依赖后也可双击 **Start.command**。
+启动命令会初始化本地数据库。若终端询问是否应用 D1 迁移，确认目标显示为 `local` 后继续。打开终端显示的地址，默认是 [http://localhost:3000](http://localhost:3000)。结束时在终端按 Ctrl+C。macOS 用户安装依赖后也可双击 **Start.command**。如果双击无法启动，请在项目目录的终端运行 `npm run local`，不用改系统安全设置。
+
+在开发模式下，打开或刷新工作台时，浏览器可能从 Google Fonts 加载 Geist 和 Geist Mono。无 Key 免费模拟也可能触发这些字体请求。若字体加载失败，浏览器会使用回退字体，试玩可以继续。
 
 ## 跑第一场真实 AI 对局
 
