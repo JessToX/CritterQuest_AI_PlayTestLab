@@ -8,7 +8,7 @@ The [MIT License](LICENSE) applies to the original workbench code and UI owned b
 
 ## Animal character artwork
 
-Jess keeps the animal character designs, originals, revisions, and screenshots depicting them solely on her local machine. They are excluded from the source and distribution packages. All rights to the artwork are reserved. Neither the software MIT license nor the game content license grants any rights to it. No third-party use is authorized.
+This game includes ready and paused portraits for ten animal characters. You may run Critter Quest and display the characters during normal play without an additional fee or contacting the author. The software MIT license and the game content license do not cover the character artwork or designs. Any other use requires prior authorization from JessToX. These terms preserve uses permitted by applicable law or the [GitHub Terms of Service, section D.5](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#5-license-grant-to-other-users), including viewing and forking a public repository on GitHub. [Character artwork terms and file list](docs/licenses/character-artwork.md)
 
 ## Game content
 

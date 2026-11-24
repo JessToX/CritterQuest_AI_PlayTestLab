@@ -1,6 +1,8 @@
 import { foodNames, missionLabel } from '@/lib/game/labels';
 import { isFood, marketCardLabel, marketPrice } from '@/lib/game/market';
 import { marketState, type MarketCard } from '@/lib/game/market-types';
+import { seatTone } from '@/lib/client/seat-portraits';
+import type { GameRecord } from '@/lib/playtest/types';
 import type { GameState } from '@/lib/game/types';
 import { FoodGlyph, SeatAvatar } from '@/components/lab/primitives';
 import {
@@ -24,10 +26,14 @@ function CardSymbol({ card }: { card: MarketCard }) {
 
 export function MarketTable({
   state,
-  portraitIndices,
+  seats,
+  status,
+  paused,
 }: {
   state: GameState;
-  portraitIndices?: number[];
+  seats: GameRecord['seats'];
+  status: GameRecord['status'];
+  paused: boolean;
 }) {
   const m = marketState(state);
   return (
@@ -133,21 +139,30 @@ export function MarketTable({
               <div
                 key={p.id}
                 className="cq-player-card"
-                data-active={p.id === state.decisionPlayerId}
+                data-active={!paused && p.id === state.decisionPlayerId}
                 data-winner={p.id === state.winnerId}
               >
                 <div className="cq-player-name">
-                  <SeatAvatar index={portraitIndices?.[i] ?? i} small />
+                  <SeatAvatar
+                    index={seatTone(seats[i]?.id ?? '', i)}
+                    portrait={seats[i]?.portrait}
+                    paused={paused}
+                    small
+                  />
                   <div>
                     <h3>{p.name}</h3>
                     <small>
                       {p.id === state.winnerId
                         ? '本局获胜'
-                        : state.winnerId
-                          ? '本局结束'
-                          : p.id === state.decisionPlayerId
-                            ? '当前决策位'
-                            : '等待回合'}
+                        : status === 'terminated'
+                          ? '本局已终止'
+                          : status === 'complete' || state.winnerId
+                            ? '本局结束'
+                            : paused
+                              ? '待命'
+                              : p.id === state.decisionPlayerId
+                                ? '当前决策位'
+                                : '等待回合'}
                     </small>
                   </div>
                   {p.id === state.winnerId && (

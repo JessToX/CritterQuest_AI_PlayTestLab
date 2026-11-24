@@ -57,6 +57,7 @@ interface RunBatchOptions {
   mode: GameRecord['mode'];
   resume?: GameRecord;
   seats: Seat[];
+  portraitForSeat?: (id: string) => string;
   rule: RuleVersion;
   experiment: ExperimentConfig;
   count: number;
@@ -123,13 +124,20 @@ export async function runBatch(options: RunBatchOptions) {
                   ),
                 })),
         }
-      : newRecord(seats, rule, (batchSeed + index) >>> 0, mode, {
-          ...experiment,
-          batchId: batch.id,
-          batchSeed,
-          plannedGames,
-          gameIndex: index,
-        });
+      : newRecord(
+          seats,
+          rule,
+          (batchSeed + index) >>> 0,
+          mode,
+          {
+            ...experiment,
+            batchId: batch.id,
+            batchSeed,
+            plannedGames,
+            gameIndex: index,
+          },
+          options.portraitForSeat,
+        );
     if (!resume) {
       batch.gameIds.push(record.id);
       await options.saveExperiment(batch);

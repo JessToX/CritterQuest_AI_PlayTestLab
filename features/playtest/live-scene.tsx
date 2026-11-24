@@ -1,7 +1,5 @@
-import {
-  CritterPortrait,
-  critterSeatIndex,
-} from '@/components/lab/critter-portrait';
+import { CritterPortrait } from '@/components/lab/critter-portrait';
+import { seatTone } from '@/lib/client/seat-portraits';
 import { readableText } from '@/lib/game/labels';
 import type { GameRecord } from '@/lib/playtest/types';
 
@@ -23,20 +21,21 @@ export function LiveScene({
     (entry) =>
       entry.channel === 'public-table-v1' && entry.turn === game.state.turn,
   );
+  const playing = running && game.status === 'running' && !stopping;
   const speaking =
-    running && !stopping && !summarizing && !unsaved && game.chat[publicIndex];
+    playing && !summarizing && !unsaved && game.chat[publicIndex];
   const active = game.state.players.findIndex(
     (player) => player.id === game.state.decisionPlayerId,
   );
   const speaker = speaking
     ? game.seats.findIndex((seat) => seat.name === speaking.speaker)
     : active;
-  const paused = !running || stopping;
+  const paused = !playing;
   const seat = game.seats[Math.max(0, speaker)];
-  const portrait = seat ? critterSeatIndex(seat.id, Math.max(0, speaker)) : 0;
+  const seatId = seat?.id ?? '';
   const cut = speaking
     ? `${game.id}-line-${publicIndex}`
-    : `${game.id}-seat-${portrait}-${paused}`;
+    : `${game.id}-seat-${seatId}-${paused}`;
   const title = unsaved
     ? '保存未完成，请先重试保存。'
     : stopping
@@ -52,7 +51,7 @@ export function LiveScene({
               : '观察牌桌，等待下一次选择。';
   const text = speaking ? Array.from(speaking.message) : [];
   const action =
-    running && !stopping && !summarizing && !unsaved
+    playing && !summarizing && !unsaved
       ? game.state.events.findLast(
           (event) =>
             event.turn === game.state.turn &&
@@ -69,7 +68,8 @@ export function LiveScene({
     >
       <CritterPortrait
         key={`portrait-${cut}`}
-        index={portrait}
+        index={seatTone(seatId, Math.max(0, speaker))}
+        portrait={seat?.portrait}
         paused={paused}
       />
       <div className="cq-live-scene-copy" key={`copy-${cut}`}>

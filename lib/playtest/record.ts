@@ -18,6 +18,7 @@ export function newRecord(
   seed: number,
   mode: GameRecord['mode'],
   experiment?: ExperimentSnapshot,
+  portraitForSeat?: (id: string) => string,
 ): GameRecord {
   if (!isOfficialRule(rule)) throw new Error(UNSUPPORTED_RELEASE_VERSION);
   if (experiment) experiment = normalizeExperiment(rule.config, experiment);
@@ -45,6 +46,7 @@ export function newRecord(
     status: 'running',
     seats: seats.map((s) => ({
       id: s.profile.id,
+      ...(portraitForSeat && { portrait: portraitForSeat(s.profile.id) }),
       name: s.profile.name,
       model: s.profile.model,
       provider: s.connection.label,

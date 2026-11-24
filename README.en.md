@@ -4,7 +4,7 @@
 
 Critter Quest V7.1 is a local workbench for running card-game matches with real AI models, evaluating their play, and exporting reports. Bring your own provider API key to run a real match.
 
-The original software and the included geometric seat markers use the [MIT License](LICENSE). The original game content has [separate noncommercial terms](GAME-CONTENT-LICENSE.md). Jess keeps the animal character designs solely on her local machine. They are excluded from the source package. All rights to those designs are reserved. No third-party use is authorized.
+The original software and the included geometric seat markers use the [MIT License](LICENSE). The original game content has [separate noncommercial terms](GAME-CONTENT-LICENSE.md). This game includes ready and paused portraits for ten animal characters. You may run Critter Quest and display the characters during normal play without an additional fee or contacting the author. The software MIT license and the game content license do not cover the character artwork or designs. Any other use requires prior authorization from JessToX. These terms preserve uses permitted by applicable law or the [GitHub Terms of Service, section D.5](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#5-license-grant-to-other-users), including viewing and forking a public repository on GitHub. [Character artwork terms and file list](docs/licenses/character-artwork.md)
 
 ## Install and start
 
@@ -46,6 +46,8 @@ The rule ID is `final-v7.1`. Standard mode takes three completed orders to win, 
 ## Optional preview: free simulation without a key
 
 In **Table & AI (牌桌与 AI)**, enable 2–4 seats, choose **Free Simulation (免费模拟 · 不调用模型)**, and click **Start Free Simulation (开始免费模拟)**. Local strategies play through the rules, and you can save, resume, and export the run to explore the table, rules, and reports. Use API Match to evaluate actual model performance.
+
+In the table setup, open the seat configuration button (配置座位) to choose a portrait. Geometric seat markers are the default. Each new game records its portraits at the start, so later preference changes preserve the appearance of resumed games and replays.
 
 ![Critter Quest V7.1 Test Reports page showing a completed free simulation and JSON and Word export buttons](docs/images/v71-free-playtest.png)
 

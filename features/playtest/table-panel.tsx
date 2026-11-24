@@ -1,5 +1,5 @@
 'use client';
-import { CritterPortrait } from '@/components/lab/critter-portrait';
+import { PreferredCritterPortrait } from '@/components/lab/critter-portrait';
 import {
   NativeSelect,
   NativeSelectOption,
@@ -104,9 +104,9 @@ export function TablePanel({
               小队<span>集结！</span>
             </p>
             <div className="cq-hero-shot" data-enabled={focus.enabled}>
-              <CritterPortrait
+              <PreferredCritterPortrait
                 key={`${focusedSeat}-${focus.enabled}`}
-                index={focusedSeat}
+                seatId={focus.profile.id}
                 paused={!focus.enabled}
                 className="cq-hero-portrait"
               />
@@ -139,7 +139,10 @@ export function TablePanel({
                   aria-pressed={i === focusedSeat}
                   onClick={() => setFocusedSeat(i)}
                 >
-                  <CritterPortrait index={i} paused={!s.enabled} />
+                  <PreferredCritterPortrait
+                    seatId={s.profile.id}
+                    paused={!s.enabled}
+                  />
                   <span className="cq-cast-letter" aria-hidden="true">
                     {'ABCD'[i]}
                   </span>
@@ -189,7 +192,7 @@ export function TablePanel({
                   }}
                 >
                   <Settings2 size={13} aria-hidden="true" />
-                  配置模型与记忆
+                  配置座位
                 </Button>
               </article>
             ))}

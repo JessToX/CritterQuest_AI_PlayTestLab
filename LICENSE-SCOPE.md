@@ -8,7 +8,7 @@
 
 ## 动物角色美术
 
-Jess 的动物角色设计、原稿、改稿及含角色图像的截图仅保存在本机，不随源码或发行包提供。角色美术保留全部权利，不适用软件的 MIT 许可或游戏内容许可，未授权第三方以任何方式使用。
+本游戏随附十款动物角色的正常与待命图。在 Critter Quest 中正常运行游戏和展示这些角色，无需另付费或联系作者。角色图与角色设计不适用软件 MIT 许可或游戏内容许可。任何另行使用均须事先获得 JessToX 授权。 本说明不影响适用法律或 [GitHub 服务条款 D.5](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#5-license-grant-to-other-users) 允许的使用，包括在 GitHub 上查看、fork 公开仓库。 [角色美术说明与文件清单](docs/licenses/character-artwork.md)
 
 ## 游戏内容
 

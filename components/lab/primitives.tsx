@@ -13,18 +13,22 @@ import { CritterPortrait } from './critter-portrait';
 
 export function SeatAvatar({
   index,
+  portrait,
+  paused,
   small = false,
 }: {
   index: number;
+  portrait?: string;
+  paused?: boolean;
   small?: boolean;
 }) {
   return (
     <span
       aria-hidden="true"
       className={`cq-avatar${small ? ' cq-avatar-sm' : ''}`}
-      data-tone={index % 4}
+      data-tone={index}
     >
-      <CritterPortrait index={index} />
+      <CritterPortrait index={index} portrait={portrait} paused={paused} />
     </span>
   );
 }

@@ -4,7 +4,7 @@
 
 Critter Quest V7.1 是一款在本机用真实 AI 模型运行卡牌对局、测试模型表现并导出报告的工作台。运行真实对局需要你自己的供应商 API Key。
 
-原创软件与随包的通用几何席位图采用 [MIT](LICENSE)，原创游戏内容适用[单独的非商业许可](GAME-CONTENT-LICENSE.md)。Jess 的动物角色设计仅保存在本机，未随源码提供，全部权利保留。第三方未获任何使用授权。
+原创软件与随包的通用几何席位图采用 [MIT](LICENSE)，原创游戏内容适用[单独的非商业许可](GAME-CONTENT-LICENSE.md)。本游戏随附十款动物角色的正常与待命图。在 Critter Quest 中正常运行游戏和展示这些角色，无需另付费或联系作者。角色图与角色设计不适用软件 MIT 许可或游戏内容许可。任何另行使用均须事先获得 JessToX 授权。 本说明不影响适用法律或 [GitHub 服务条款 D.5](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#5-license-grant-to-other-users) 允许的使用，包括在 GitHub 上查看、fork 公开仓库。 [角色美术说明与文件清单](docs/licenses/character-artwork.md)
 
 ## 安装与启动
 
@@ -44,6 +44,8 @@ npm run local
 ## 可选体验：无 Key 免费模拟
 
 在 **牌桌与 AI** 启用 2–4 个座位，选择 **免费模拟 · 不调用模型**，点击 **开始免费模拟**。本地策略会跑完规则流程，也可保存、恢复和导出，用于熟悉牌桌、规则与报告。真实模型表现请使用 API 对战评估。
+
+在「牌桌与 AI」打开对应席位的「配置座位」，即可选择头像。默认使用几何席位图。新局记录开局时的头像，更改浏览器偏好不影响续局或回看。
 
 ![Critter Quest V7.1 测试报告页，显示已完成的免费模拟及 JSON、Word 导出按钮](docs/images/v71-free-playtest.png)
 

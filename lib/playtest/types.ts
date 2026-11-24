@@ -98,6 +98,7 @@ export interface GameRecord {
   terminationReason?: string;
   seats: Array<{
     id: string;
+    portrait?: string;
     name: string;
     model: string;
     provider: string;

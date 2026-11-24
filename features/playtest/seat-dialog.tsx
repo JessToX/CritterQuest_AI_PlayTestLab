@@ -14,6 +14,7 @@ import {
   NativeSelect,
   NativeSelectOption,
 } from '@/components/ui/native-select';
+import { SettingsSelect } from '@/components/ui/settings-select';
 import { ModelControls } from '@/features/playtest/experiment-controls';
 import { type Seat } from '@/lib/playtest/types';
 import {
@@ -23,7 +24,50 @@ import {
   type SetStateAction,
 } from 'react';
 import { presets } from './configuration.ts';
-import { CritterPortrait } from '@/components/lab/critter-portrait';
+import {
+  selectablePortraits,
+  seatTone,
+  selectPortrait,
+} from '@/lib/client/seat-portraits';
+import {
+  CritterPortrait,
+  useSeatPortrait,
+} from '@/components/lab/critter-portrait';
+
+function PortraitPicker({ seat }: { seat: Seat }) {
+  const seatId = seat.profile.id;
+  const animal = useSeatPortrait(seatId);
+  return (
+    <div className="cq-portrait-picker">
+      <CritterPortrait
+        index={seatTone(seatId)}
+        portrait={animal}
+        paused={!seat.enabled}
+      />
+      <div>
+        <Label htmlFor="seat-portrait">座位头像</Label>
+        <SettingsSelect
+          id="seat-portrait"
+          aria-describedby="seat-portrait-hint"
+          value={animal}
+          renderOptionIcon={(portrait) => (
+            <CritterPortrait index={seatTone(seatId)} portrait={portrait} />
+          )}
+          onValueChange={(next) => selectPortrait(seatId, next)}
+          options={Object.entries(selectablePortraits).map(
+            ([value, label]) => ({
+              value,
+              label,
+            }),
+          )}
+        />
+        <p id="seat-portrait-hint">
+          偏好保存在此浏览器。新对局会记住开局时的头像，回看时沿用。
+        </p>
+      </div>
+    </div>
+  );
+}
 
 interface Props {
   edit: number | null;
@@ -81,17 +125,7 @@ export function SeatDialog({
         </DialogHeader>
         {edit !== null && (
           <div className="cq-seat-editor-body">
-            <div className="cq-config-cut">
-              <CritterPortrait index={edit} />
-              <div>
-                <span>座位特写</span>
-                <p>
-                  模型与记忆，
-                  <br />
-                  在这一格配好。
-                </p>
-              </div>
-            </div>
+            <PortraitPicker seat={seats[edit]} />
             <div className="cq-seat-editor-fields">
               <DialogDescription>
                 点击“保存配置”会将 API Key

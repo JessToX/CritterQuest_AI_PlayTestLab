@@ -11,6 +11,7 @@ import {
   restoreHistoricalKeys,
   restoreKeys,
 } from '@/lib/client/saved-keys';
+import { readPortrait } from '@/lib/client/seat-portraits';
 import { loadWorkspace } from '@/lib/client/workspace';
 import type { MemoryEntry } from '@/lib/memory/types';
 import { runBatch } from '@/lib/playtest/batch';
@@ -417,6 +418,7 @@ export function usePlaytestController() {
         mode,
         resume,
         seats: selected,
+        portraitForSeat: readPortrait,
         rule,
         experiment,
         count,

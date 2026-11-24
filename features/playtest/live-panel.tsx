@@ -6,7 +6,6 @@ import { TabsContent } from '@/components/ui/tabs';
 import { CallProgress } from './call-progress';
 import { MarketTable } from './market-table';
 import { LiveScene } from './live-scene';
-import { critterSeatIndex } from '@/components/lab/critter-portrait';
 import {
   phaseNames,
   readableText,
@@ -50,7 +49,10 @@ export function LivePanel({
 }: Props) {
   const report = current ? reportFor(current) : null;
   const acting =
-    current?.state.status === 'active'
+    current?.status === 'running' &&
+    running &&
+    !stopping &&
+    current.state.status === 'active'
       ? current.state.players.find(
           (player) => player.id === current.state.decisionPlayerId,
         )
@@ -64,9 +66,11 @@ export function LivePanel({
               <GameStatus status={current.status} />
               <strong>
                 第 {current.state.turn} 回合 ·{' '}
-                {current.state.status !== 'active'
-                  ? '已结束'
-                  : (phaseNames[current.state.phase] ?? '回合进行中')}
+                {current.status === 'terminated'
+                  ? '已终止'
+                  : current.state.status !== 'active'
+                    ? '已结束'
+                    : (phaseNames[current.state.phase] ?? '回合进行中')}
               </strong>
               {current.state.winnerId && report ? (
                 <span className="cq-live-winner">
@@ -147,9 +151,9 @@ export function LivePanel({
             <section className={`${panel} cq-live-table`}>
               <MarketTable
                 state={current.state}
-                portraitIndices={current.seats.map((seat, i) =>
-                  critterSeatIndex(seat.id, i),
-                )}
+                seats={current.seats}
+                status={current.status}
+                paused={!running || current.status !== 'running' || stopping}
               />
               <p className="text-xs text-muted-foreground mt-5">
                 设计者全知视角。每个 AI 只收到其座位可见的信息。
