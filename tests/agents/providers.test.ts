@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import type { ProviderConnection } from '../../lib/agents/types.ts';
 import { listModels, requestModel } from '../../lib/agents/model.ts';
 void test('provider adapters send the correct protocol and normalize token usage', async () => {
   const real = globalThis.fetch;
@@ -223,4 +224,25 @@ void test('summary requests preserve each dialect’s wire fields and instructio
       },
     },
   ]);
+});
+
+void test('an in-flight completion keeps the dialect and path chosen at dispatch', async (t) => {
+  const connection: ProviderConnection = {
+    id: 'fixture',
+    label: 'Fixture',
+    kind: 'openai-compatible',
+    baseUrl: 'https://models.example/v1///models',
+    apiKey: 'fixture',
+  };
+  let endpoint = '';
+  t.mock.method(globalThis, 'fetch', async (url: string) => {
+    endpoint = url;
+    connection.kind = 'anthropic';
+    return Response.json({
+      choices: [{ message: { content: '{"ok":true}' } }],
+    });
+  });
+  const result = await requestModel(connection, 'm', 'system', {});
+  assert.equal(endpoint, 'https://models.example/v1/chat/completions');
+  assert.deepEqual(result.data, { ok: true });
 });

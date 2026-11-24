@@ -32,7 +32,7 @@ export async function requestModel(
   signal?: AbortSignal,
   options: ModelRequestOptions = {},
 ) {
-  const { baseUrl, endpoint, payload } = prepareModelRequest(
+  const { kind, baseUrl, endpoint, payload } = prepareModelRequest(
     connection,
     model,
     system,
@@ -60,7 +60,7 @@ export async function requestModel(
       signal: combined,
       headers: {
         'Content-Type': 'application/json',
-        ...providerHeaders(connection.kind, connection.apiKey),
+        ...providerHeaders(kind, connection.apiKey),
       },
       body: JSON.stringify(payload),
     });
@@ -136,9 +136,9 @@ export async function requestModel(
         retryable: false,
       });
     const content =
-      connection.kind === 'anthropic'
+      kind === 'anthropic'
         ? body.content?.find((c) => c.type === 'text')?.text
-        : connection.kind === 'openai'
+        : kind === 'openai'
           ? body.output
               ?.flatMap((x) => x.content || [])
               .filter((c) => c.type === 'output_text')

@@ -37,10 +37,11 @@ export function prepareModelRequest(
     system = protocols.chat;
   }
   const baseUrl = providerBaseUrl(connection);
-  const anthropic = connection.kind === 'anthropic',
-    openai = connection.kind === 'openai';
+  const kind = connection.kind;
+  const anthropic = kind === 'anthropic',
+    openai = kind === 'openai';
   const endpoint =
-    baseUrl +
+    baseUrl.replace(/\/$/, '') +
     (anthropic ? '/messages' : openai ? '/responses' : '/chat/completions');
   const summaryTask = ['checkpoint', 'reflection', 'batch'].includes(
     options.task || '',
@@ -103,5 +104,5 @@ export function prepareModelRequest(
       throw new Error('思考开关仅用于 DeepSeek 官方接口');
     payload.thinking = { type: settings.thinking };
   }
-  return { baseUrl, endpoint, payload };
+  return { kind, baseUrl, endpoint, payload };
 }

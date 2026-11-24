@@ -30,7 +30,10 @@ export function useWorkspaceRecords(setMessage: (message: string) => void) {
     } catch (e) {
       pendingSave.current = structuredClone(g);
       setUnsavedGame(pendingSave.current);
-      upsertGame(structuredClone(g));
+      setGames((old) => [
+        structuredClone(g),
+        ...old.filter((item) => item.id !== g.id),
+      ]);
       throw e;
     }
   }
