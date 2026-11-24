@@ -1,3 +1,10 @@
+import { deleteRecord, LabRecordReadError, putRecord, records } from '@/db/lab';
+import { packRecord, unpackRecord } from '@/lib/records/codec';
+import {
+  RECORD_PAGE_SIZE,
+  isRecordKind,
+  isDeletableRecordKind,
+} from '@/lib/records/types';
 import {
   OFFICIAL_RULE_ID,
   UNSUPPORTED_RELEASE_VERSION,
@@ -14,23 +21,20 @@ function isSupportedRecord(kind: string, value: unknown) {
     );
   return true;
 }
-import { deleteRecord, LabRecordReadError, putRecord, records } from '@/db/lab';
-import { packRecord, unpackRecord } from '@/lib/records/codec';
-const kinds = ['game', 'memory', 'rule', 'profiles', 'preset', 'experiment'];
 export async function GET(request: Request) {
   try {
     const kind = new URL(request.url).searchParams.get('kind') || 'game';
     const offset = Number(new URL(request.url).searchParams.get('offset') || 0);
     if (!Number.isSafeInteger(offset) || offset < 0)
       return Response.json({ error: '无效页码' }, { status: 400 });
-    if (!kinds.includes(kind))
+    if (!isRecordKind(kind))
       return Response.json({ error: '无效类型' }, { status: 400 });
     const page = await records(kind, offset);
     const supported = page.filter((value) => isSupportedRecord(kind, value));
     return Response.json(
       {
         records: supported.map(packRecord),
-        hasMore: page.length === 20,
+        hasMore: page.length === RECORD_PAGE_SIZE,
         unsupported: page.length - supported.length,
       },
       { headers: { 'Cache-Control': 'no-store' } },
@@ -69,7 +73,7 @@ export async function POST(request: Request) {
     if (
       typeof id !== 'string' ||
       id.length > 180 ||
-      !kinds.includes(kind) ||
+      !isRecordKind(kind) ||
       !value
     )
       return Response.json({ error: '无效记录' }, { status: 400 });
@@ -96,7 +100,7 @@ export async function DELETE(request: Request) {
       typeof id !== 'string' ||
       !id ||
       id.length > 180 ||
-      !['game', 'memory', 'preset'].includes(kind)
+      !isDeletableRecordKind(kind)
     )
       return Response.json({ error: '无效删除请求' }, { status: 400 });
     await deleteRecord(id, kind, (value) => {

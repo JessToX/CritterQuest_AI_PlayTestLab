@@ -6,14 +6,8 @@ import {
   visibleStateFor,
 } from '../game/engine.ts';
 import { actionLabel } from '../game/labels.ts';
-import {
-  engineRegistration,
-  UNSUPPORTED_RELEASE_VERSION,
-} from '../game/registry.ts';
-import { memoriesFor } from '../memory/selection.ts';
 import type { MemoryEntry } from '../memory/types.ts';
-import { isOfficialGame } from '../rules/scope.ts';
-import { adjudicationsFor } from '../rules/versions.ts';
+import { prepareRun } from './prepare-run.ts';
 import { createModelCaller } from './model-caller.ts';
 import { createPlayerContext } from './player-context.ts';
 import { rememberGame } from './remember-game.ts';
@@ -26,50 +20,14 @@ export async function runGame(
   record: GameRecord,
   seats: Seat[],
   entries: MemoryEntry[],
-  options: RunOptions,
-) {
-  if (!isOfficialGame(record)) throw new Error(UNSUPPORTED_RELEASE_VERSION);
-  if (
-    !options.summaryOnly &&
-    (record.status === 'terminated' || record.status === 'complete')
-  )
-    throw new Error('已结束的对局不能继续');
-  const r = structuredClone(record);
-  // Legacy talkedTurn was set only after the active player's old message.
-  // New sessions track the active public call in replies, including interruption.
-  if (r.publicTalkVersion !== 1 && r.talkedTurn === r.state.turn) {
-    const activeSeat = seats[r.state.activePlayerIndex];
-    if (activeSeat && !r.replies.includes(activeSeat.profile.id))
-      r.replies.push(activeSeat.profile.id);
-  }
-  r.publicTalkVersion = 1;
-  if (r.pendingDecision)
-    r.pendingDecision.publicMessage = publicDecisionMessage(
-      r.pendingDecision.publicMessage,
-    );
-  if (!options.summaryOnly) {
-    r.status = 'running';
-    if (r.state.config.mechanics) {
-      r.engineVersion = engineRegistration(r.state.config).engineVersion;
-      r.adjudicationNotes = adjudicationsFor(r.state.config);
-    }
-  }
-  r.runtime ??= { chat: options.chat, maxCalls: options.maxCalls };
-  if (r.mode === 'api') options = { ...options, maxCalls: r.runtime.maxCalls };
-  r.summaryJobs ??= [];
-  r.opportunityLog ??= [];
-  r.frozenMemories ??= Object.fromEntries(
-    seats
-      .filter((s) => s.profile.memoryMode === 'frozen')
-      .map((s) => [
-        s.profile.id,
-        structuredClone(memoriesFor(entries, s, r.rule.id, r.mode)),
-      ]),
+  requestedOptions: RunOptions,
+): Promise<GameRecord> {
+  const { record: r, options } = prepareRun(
+    record,
+    seats,
+    entries,
+    requestedOptions,
   );
-  r.decisions ??= [];
-  r.chatChoices ??= [];
-  delete r.error;
-  delete r.retryWait;
   const publish = async () => {
     options.onUpdate(structuredClone(r));
     await options.save(r);

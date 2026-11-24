@@ -1,13 +1,14 @@
 import { packRecord, unpackRecord } from '../records/codec.ts';
-import type {
-  DeletableRecordKind,
-  RecordKind,
-  RecordTypes,
+import {
+  RECORD_PAGE_SIZE,
+  type DeletableRecordKind,
+  type RecordKind,
+  type RecordTypes,
 } from '../records/types.ts';
 export async function loadRecords<K extends RecordKind>(kind: K) {
   const records: RecordTypes[K][] = [];
   let unsupported = 0;
-  for (let offset = 0; ; offset += 20) {
+  for (let offset = 0; ; offset += RECORD_PAGE_SIZE) {
     const response = await fetch('/api/lab?kind=' + kind + '&offset=' + offset);
     const body = (await response.json()) as {
       error?: string;

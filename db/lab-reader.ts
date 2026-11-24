@@ -1,3 +1,4 @@
+import { RECORD_PAGE_SIZE } from '../lib/records/types.ts';
 import { unpackRecord } from '../lib/records/codec.ts';
 
 export interface ChunkManifest {
@@ -80,7 +81,7 @@ export async function readRecordPage(
   const result = await db
     .prepare(
       withChunks(
-        'SELECT id, value, updated_at FROM lab_records WHERE kind = ? ORDER BY updated_at DESC, id DESC LIMIT 20 OFFSET ?',
+        `SELECT id, value, updated_at FROM lab_records WHERE kind = ? ORDER BY updated_at DESC, id DESC LIMIT ${RECORD_PAGE_SIZE} OFFSET ?`,
       ),
     )
     .bind(kind, offset)
