@@ -2,9 +2,9 @@
 
 [中文](README.md) · [English](README.en.md)
 
-Critter Quest V7.1 is a local workbench for running card-game matches with real AI models, evaluating their play, and exporting reports. Bring your own provider API key to run a real match.
+Play a free local match with built-in strategies, or bring your own provider API key to see how real AI models play the same card game.
 
-The original software and the included geometric seat markers use the [MIT License](LICENSE). The original game content has [separate noncommercial terms](GAME-CONTENT-LICENSE.md). This game includes ready and paused portraits for ten animal characters. You may run Critter Quest and display the characters during normal play without an additional fee or contacting the author. The software MIT license and the game content license do not cover the character artwork or designs. Any other use requires prior authorization from JessToX. These terms preserve uses permitted by applicable law or the [GitHub Terms of Service, section D.5](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#5-license-grant-to-other-users), including viewing and forking a public repository on GitHub. [Character artwork terms and file list](docs/licenses/character-artwork.md)
+[Install and start](#install-and-start) · [Play without an API key](#play-without-an-api-key) · [Real AI match](#run-your-first-real-ai-match)
 
 ## Install and start
 
@@ -21,12 +21,21 @@ The startup command initializes a local database. If prompted to apply D1 migrat
 
 In development mode, opening or refreshing the workbench may cause the browser to request Geist and Geist Mono from Google Fonts, even during a free simulation without an API key. If the fonts fail to load, the browser uses fallback fonts and you can keep playing.
 
+## Play without an API key
+
+1. Open **Table & AI (牌桌与 AI)**, enable 2–4 seats, and choose **Free Simulation (免费模拟 · 不调用模型)**.
+2. Click **Start Free Simulation (开始免费模拟)**. Follow the players in **Live Match (实时对局)**. Once the match is saved, open **Test Reports (测试报告)** to review it or export a report.
+
+To pick one of the ten animals before a match, open **Configure Seat (配置座位)** and select a **Seat Portrait (座位头像)**. The default is a geometric marker. Each match saves its portraits for resuming and replay.
+
+![Agent B’s open seat portrait menu, with the red fox selected and other animal portraits visible](docs/images/seat-portraits.png)
+
 ## Run your first real AI match
 
 The interface uses Chinese labels. Use the labels in parentheses to find the controls.
 
 1. In **Table & AI (牌桌与 AI)**, enable 2–4 seats and select **API Match (API 对战 · 按供应商计费)**.
-2. For each enabled seat, open **Configure Model & Memory (配置模型与记忆)**. Choose a provider, enter your **API Key**, select a model from **选择模型** or enter its ID in **模型 ID（可手动填写）**, then click **Save Configuration (保存配置)**.
+2. For each enabled seat, open **Configure Seat (配置座位)**. Choose a provider, enter your **API Key**, select a model from **选择模型** or enter its ID in **模型 ID（可手动填写）**, then click **Save Configuration (保存配置)**.
 3. Leave **Number of Matches (连续局数)** set to 1 and click **Start API Match (开始 API 对战)**. Follow the market, orders, and table chat in **Live Match (实时对局)**. The optional **Test Live Connection (测试真实连接)** sends one model request. Connection tests and matches can incur provider charges.
 4. To stop partway through, click **Pause & Save (暂停并保存)**. After refreshing or reopening the same address, click **View & Resume (查看并继续)**, then **Resume Current Match (继续当前对局)**. Re-enter keys for any seats that prompt for one.
 5. Once the completed match is saved, open **Test Reports (测试报告)** and choose **导出当前版本 JSON 报告** for JSON or **导出当前版本 Word** for Word.
@@ -43,17 +52,9 @@ Local records are stored in `.wrangler/state` in the project directory. Start fr
 
 The rule ID is `final-v7.1`. Standard mode takes three completed orders to win, and quick mode takes two. See **Rules (规则文档)** for the official text. To resume a match from an older version, use the corresponding workbench and its original data directory.
 
-## Optional preview: free simulation without a key
-
-In **Table & AI (牌桌与 AI)**, enable 2–4 seats, choose **Free Simulation (免费模拟 · 不调用模型)**, and click **Start Free Simulation (开始免费模拟)**. Local strategies play through the rules, and you can save, resume, and export the run to explore the table, rules, and reports. Use API Match to evaluate actual model performance.
-
-In the table setup, open the seat configuration button (配置座位) to choose a portrait. Geometric seat markers are the default. Each new game records its portraits at the start, so later preference changes preserve the appearance of resumed games and replays.
-
-![Critter Quest V7.1 Test Reports page showing a completed free simulation and JSON and Word export buttons](docs/images/v71-free-playtest.png)
-
-_The screenshot shows a no-key simulation from an isolated environment._
-
 ## Licenses and attribution
+
+The original software and the included geometric seat markers use the [MIT License](LICENSE). The original game content has [separate noncommercial terms](GAME-CONTENT-LICENSE.md). This game includes ready and paused portraits for ten animal characters. You may run Critter Quest and display the characters during normal play without an additional fee or contacting the author. The software MIT license and the game content license do not cover the character artwork or designs. Any other use requires prior authorization from JessToX. These terms preserve uses permitted by applicable law or the [GitHub Terms of Service, section D.5](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#5-license-grant-to-other-users), including viewing and forking a public repository on GitHub. [Character artwork terms and file list](docs/licenses/character-artwork.md)
 
 - **Software and UI.** The project’s original code and UI, the confirmed geometric seat artwork, and the site icon are available under the [MIT License](LICENSE), including for commercial use. The copyright notice is `Copyright (c) 2026 JessToX`. See the [license scope](LICENSE-SCOPE.en.md).
 - **Game content.** Anyone may use, copy, share, and adapt JessToX’s original V7.1 game content for noncommercial purposes. Commercial use requires separate permission from JessToX where authorization is required by law. This covers original rule text, cards, orders, crafting lists, and copies of that expression in source, snapshots, and the UI. See the [game content permission](GAME-CONTENT-LICENSE.md) and [scope](LICENSE-SCOPE.en.md#game-content).
