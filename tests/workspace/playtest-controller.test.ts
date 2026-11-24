@@ -8,19 +8,20 @@ import type { GameRecord } from '../../lib/playtest/types.ts';
 import type { runBatch } from '../../lib/playtest/batch.ts';
 import type { runGame } from '../../lib/playtest/run-game.ts';
 
-const source = readFileSync(
-  new URL(
-    '../../features/workspace/use-playtest-controller.ts',
-    import.meta.url,
-  ),
-  'utf8',
-);
-const { outputText } = ts.transpileModule(source, {
-  compilerOptions: {
-    module: ts.ModuleKind.CommonJS,
-    target: ts.ScriptTarget.ESNext,
-  },
-});
+function compileHook(filename: string) {
+  const source = readFileSync(
+    new URL('../../features/workspace/' + filename, import.meta.url),
+    'utf8',
+  );
+  return ts.transpileModule(source, {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ESNext,
+    },
+  }).outputText;
+}
+const controllerCode = compileHook('use-playtest-controller.ts');
+const recordsCode = compileHook('use-workspace-records.ts');
 
 function game(id: string, status: GameRecord['status'] = 'complete') {
   return { id, status, mode: 'simulation', rule: { id: 'v71' } } as GameRecord;
@@ -55,6 +56,9 @@ function mount({
         return (slots[i] ??= { current: initial });
       },
       useEffect() {},
+      useCallback<T>(callback: T) {
+        return callback;
+      },
     },
     '@/lib/game/registry': {
       engineRegistration: () => ({ capabilities: { minimumPlayers: 2 } }),
@@ -73,13 +77,19 @@ function mount({
     },
   };
   const exports = {} as { usePlaytestController: typeof usePlaytestController };
-  runInNewContext(outputText, {
-    exports,
-    require: (path: string) => modules[path] ?? {},
-    AbortController,
-    structuredClone,
-    Error,
-  });
+  function evaluate(code: string, moduleExports: object) {
+    runInNewContext(code, {
+      exports: moduleExports,
+      require: (path: string) => modules[path] ?? {},
+      AbortController,
+      structuredClone,
+      Error,
+    });
+  }
+  const records = {};
+  evaluate(recordsCode, records);
+  modules['./use-workspace-records.ts'] = records;
+  evaluate(controllerCode, exports);
   return () => {
     cursor = 0;
     return exports.usePlaytestController();

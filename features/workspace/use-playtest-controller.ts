@@ -13,7 +13,7 @@ import {
 } from '@/lib/client/saved-keys';
 import { readPortrait } from '@/lib/client/seat-portraits';
 import { loadWorkspace } from '@/lib/client/workspace';
-import type { MemoryEntry } from '@/lib/memory/types';
+import { useWorkspaceRecords } from './use-workspace-records.ts';
 import { runBatch } from '@/lib/playtest/batch';
 import {
   needsResumeInput,
@@ -35,16 +35,28 @@ export function usePlaytestController() {
   const [resumeError, setResumeError] = useState('');
   const [terminateConfirm, setTerminateConfirm] = useState(false);
   const [stopping, setStopping] = useState(false);
-  const [unsavedGame, setUnsavedGame] = useState<GameRecord | null>(null);
-  const pendingSave = useRef<GameRecord | null>(null);
-  const [retryingSave, setRetryingSave] = useState(false);
-  const retryingSaveRef = useRef(false);
-  const [games, setGames] = useState<GameRecord[]>([]),
-    [current, setCurrent] = useState<GameRecord | null>(null),
-    [memories, setMemories] = useState<MemoryEntry[]>([]);
   const [message, setMessage] = useState('正在读取本地记录…'),
     [running, setRunning] = useState(false),
     [ready, setReady] = useState(false);
+  const {
+    games,
+    setGames,
+    current,
+    setCurrent,
+    memories,
+    loadMemories,
+    readMemories,
+    persistGame,
+    persistMemory,
+    deleteMemory,
+    hasPendingSave,
+    unsavedGame,
+    retryPendingSave,
+    retryingSave,
+    replaceGame,
+    upsertGame,
+    removeGameFromState,
+  } = useWorkspaceRecords(setMessage);
   const configuration = useConfiguration(setMessage);
   const {
     seats,
@@ -75,8 +87,7 @@ export function usePlaytestController() {
   } = configuration;
   const [tab, setTab] = useState('table');
   const [summarizing, setSummarizing] = useState(false);
-  const controller = useRef<AbortController | null>(null),
-    memoryRef = useRef<MemoryEntry[]>([]);
+  const controller = useRef<AbortController | null>(null);
   const [unsupportedRecords, setUnsupportedRecords] = useState(0);
   const rule = BASE_RULE;
   const ruleId = rule.id;
@@ -86,8 +97,7 @@ export function usePlaytestController() {
       .then(({ games, memories, presets, seats: loadedSeats, unsupported }) => {
         setExperimentPresets(presets);
         setGames(games);
-        setMemories(memories);
-        memoryRef.current = memories;
+        loadMemories(memories);
         setUnsupportedRecords(unsupported);
         let keyNotice = '';
         try {
@@ -101,67 +111,18 @@ export function usePlaytestController() {
       })
       .catch((e) => setMessage(String(e.message)));
     return () => controller.current?.abort('page-unload');
-  }, [setSeats, setExperimentPresets]);
+  }, [setSeats, setExperimentPresets, setGames, loadMemories]);
   function requireSavedGame() {
-    if (!pendingSave.current) return true;
+    if (!hasPendingSave()) return true;
     setMessage('请先在实时对局中重试保存，避免丢失当前记录');
     setTab('live');
     return false;
-  }
-  async function persistGame(g: GameRecord) {
-    if (pendingSave.current && pendingSave.current.id !== g.id)
-      throw new Error('请先重试保存待保存的对局');
-    try {
-      await save(g.id, 'game', g);
-      if (pendingSave.current?.id === g.id) {
-        pendingSave.current = null;
-        setUnsavedGame(null);
-      }
-    } catch (e) {
-      pendingSave.current = structuredClone(g);
-      setUnsavedGame(pendingSave.current);
-      setGames((old) => [
-        structuredClone(g),
-        ...old.filter((item) => item.id !== g.id),
-      ]);
-      throw e;
-    }
-  }
-  async function persistMemory(entry: MemoryEntry) {
-    await save(entry.id, 'memory', entry);
-    memoryRef.current = memoryRef.current.some(
-      (candidate) => candidate.id === entry.id,
-    )
-      ? memoryRef.current.map((candidate) =>
-          candidate.id === entry.id ? entry : candidate,
-        )
-      : [...memoryRef.current, entry];
-    setMemories(memoryRef.current);
-  }
-  async function deleteMemory(entry: MemoryEntry) {
-    await removeRecord(entry.id, 'memory');
-    memoryRef.current = memoryRef.current.filter(
-      (candidate) => candidate.id !== entry.id,
-    );
-    setMemories(memoryRef.current);
   }
   function pauseRun() {
     controller.current?.abort('user-pause');
   }
   async function retryUnsavedGame() {
-    const pending = pendingSave.current;
-    if (!pending || controller.current || retryingSaveRef.current) return;
-    retryingSaveRef.current = true;
-    setRetryingSave(true);
-    try {
-      await persistGame(pending);
-      setMessage('已重新保存对局');
-    } catch {
-      setMessage('保存仍失败，请重试');
-    } finally {
-      retryingSaveRef.current = false;
-      setRetryingSave(false);
-    }
+    if (!controller.current) await retryPendingSave();
   }
   function selectGame(game: GameRecord) {
     if (!isOfficialGame(game)) {
@@ -170,22 +131,6 @@ export function usePlaytestController() {
     }
     setCurrent(game);
     setTab('live');
-  }
-  function replaceGame(game: GameRecord) {
-    setGames((old) =>
-      old.map((candidate) => (candidate.id === game.id ? game : candidate)),
-    );
-    setCurrent((selected) => (selected?.id === game.id ? game : selected));
-  }
-  function upsertGame(game: GameRecord) {
-    setGames((old) => [
-      game,
-      ...old.filter((candidate) => candidate.id !== game.id),
-    ]);
-  }
-  function removeGameFromState(game: GameRecord) {
-    setGames((old) => old.filter((candidate) => candidate.id !== game.id));
-    setCurrent((selected) => (selected?.id === game.id ? null : selected));
   }
   async function deletePreset(id: string) {
     await removeRecord(id, 'preset');
@@ -255,7 +200,7 @@ export function usePlaytestController() {
     setSummarizing(true);
     setTab('live');
     try {
-      const result = await runGame(g, restored, memoryRef.current, {
+      const result = await runGame(g, restored, readMemories(), {
         call: g.mode === 'simulation' ? simulationCall : apiCall,
         reserveCall: g.mode === 'api' ? reserveApiCall : undefined,
         signal: abort.signal,
@@ -302,7 +247,7 @@ export function usePlaytestController() {
       error: '对局已终止',
     };
     setCurrent(stopped);
-    setGames((old) => [stopped, ...old.filter((g) => g.id !== stopped.id)]);
+    upsertGame(stopped);
     try {
       await persistGame(stopped);
       setMessage('对局已终止并保存，开始收尾总结');
@@ -424,7 +369,7 @@ export function usePlaytestController() {
         count,
         maxCalls,
         chat,
-        memories: memoryRef.current,
+        memories: readMemories(),
         signal: abort.signal,
         call: mode === 'simulation' ? simulationCall : apiCall,
         reserveCall: mode === 'api' ? reserveApiCall : undefined,
