@@ -89,3 +89,12 @@ export function normalizeExperiment<T extends ExperimentConfig>(
     ordersToWin: experiment.ordersToWin ?? config.ordersToWin ?? 3,
   };
 }
+
+export interface ExperimentRecord {
+  id: string;
+  config: ExperimentConfig;
+  batchSeed: number;
+  plannedGames: number;
+  gameIds: string[];
+  status: string;
+}

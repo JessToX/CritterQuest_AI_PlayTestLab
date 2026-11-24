@@ -7,20 +7,14 @@ import {
   freshSeed,
   normalizeExperiment,
   type ExperimentConfig,
+  type ExperimentRecord as BatchRecord,
 } from './experiment.ts';
 import { newRecord } from './record.ts';
 import { runGame } from './run-game.ts';
 import type { RunOptions } from './runtime.ts';
 import type { CallModel, GameRecord, Seat } from './types.ts';
 
-export interface BatchRecord {
-  id: string;
-  config: ExperimentConfig;
-  batchSeed: number;
-  plannedGames: number;
-  gameIds: string[];
-  status: string;
-}
+export type { ExperimentRecord as BatchRecord } from './experiment.ts';
 
 interface BatchPlanInput {
   resume?: GameRecord;

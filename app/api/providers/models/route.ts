@@ -1,9 +1,9 @@
+import { rejectCrossOrigin } from '../../request-origin.ts';
 import { listModels } from '../../../../lib/agents/model.ts';
 import type { ProviderConnection } from '../../../../lib/agents/types.ts';
 export async function POST(request: Request) {
-  const origin = request.headers.get('origin');
-  if (origin && origin !== new URL(request.url).origin)
-    return Response.json({ error: '跨站请求被拒绝' }, { status: 403 });
+  const rejection = rejectCrossOrigin(request);
+  if (rejection) return rejection;
   try {
     const body = (await request.json()) as { connection?: ProviderConnection };
     if (!body.connection)

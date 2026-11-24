@@ -1,3 +1,4 @@
+import { rejectCrossOrigin } from '../request-origin.ts';
 import { deleteRecord, LabRecordReadError, putRecord, records } from '@/db/lab';
 import { packRecord, unpackRecord } from '@/lib/records/codec';
 import {
@@ -63,9 +64,8 @@ function sanitized(value: unknown): unknown {
 }
 export async function POST(request: Request) {
   try {
-    const origin = request.headers.get('origin');
-    if (origin && origin !== new URL(request.url).origin)
-      return Response.json({ error: '跨站请求被拒绝' }, { status: 403 });
+    const rejection = rejectCrossOrigin(request);
+    if (rejection) return rejection;
     const body = await request.text();
     if (body.length > 16000000)
       return Response.json({ error: '记录过大' }, { status: 413 });
@@ -91,9 +91,8 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const origin = request.headers.get('origin');
-  if (origin && origin !== new URL(request.url).origin)
-    return Response.json({ error: '跨站请求被拒绝' }, { status: 403 });
+  const rejection = rejectCrossOrigin(request);
+  if (rejection) return rejection;
   try {
     const { id, kind } = (await request.json()) as { id: string; kind: string };
     if (

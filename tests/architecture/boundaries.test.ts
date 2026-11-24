@@ -115,3 +115,14 @@ void test('missing local modules and nonliteral dynamic imports fail closed', ()
     ),
   );
 });
+
+void test('browser features cannot depend on the provider wire request builder', () => {
+  assert.ok(
+    messages({
+      'features/playtest/config.ts': "import '@/lib/agents/model-request';",
+      'lib/agents/model-request.ts': '',
+    }).some((message) =>
+      message.includes('Server module is browser-reachable'),
+    ),
+  );
+});

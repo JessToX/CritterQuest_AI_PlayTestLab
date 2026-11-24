@@ -1,3 +1,4 @@
+import { rejectCrossOrigin } from '../../request-origin.ts';
 import {
   ModelFailure,
   failureDetails,
@@ -10,9 +11,8 @@ import type {
 } from '../../../../lib/agents/types.ts';
 export async function POST(request: Request) {
   try {
-    const origin = request.headers.get('origin');
-    if (origin && origin !== new URL(request.url).origin)
-      return Response.json({ error: '跨站请求被拒绝' }, { status: 403 });
+    const rejection = rejectCrossOrigin(request);
+    if (rejection) return rejection;
     const { connection, model, input, task, settings } =
       (await request.json()) as {
         connection: ProviderConnection;

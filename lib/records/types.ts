@@ -1,18 +1,11 @@
 import type { MemoryEntry } from '../memory/types.ts';
 import type {
-  ExperimentConfig,
+  ExperimentRecord,
   ExperimentPreset,
 } from '../playtest/experiment.ts';
 import type { GameRecord, Seat } from '../playtest/types.ts';
 import type { RuleVersion } from '../rules/types.ts';
-export interface ExperimentRecord {
-  id: string;
-  config: ExperimentConfig;
-  batchSeed: number;
-  plannedGames: number;
-  gameIds: string[];
-  status: string;
-}
+export type { ExperimentRecord } from '../playtest/experiment.ts';
 export interface RecordTypes {
   game: GameRecord;
   memory: MemoryEntry;
