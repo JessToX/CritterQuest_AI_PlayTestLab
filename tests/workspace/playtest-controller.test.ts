@@ -183,3 +183,34 @@ void test('a terminated batch owns cancellation until its final save settles', a
   finishB.resolve();
   await second;
 });
+
+void test('retry shares one pending write across rerenders and concurrent clicks', async () => {
+  const entered = Promise.withResolvers<void>();
+  const finish = Promise.withResolvers<void>();
+  let writes = 0;
+  const render = mount({
+    save: async (_id, kind) => {
+      if (kind !== 'game') return;
+      if (++writes === 1) throw new Error('storage unavailable');
+      entered.resolve();
+      await finish.promise;
+    },
+    batch: async (options) => {
+      await options.persistGame(game('pending'));
+    },
+    summary: async (record) => record,
+  });
+  await render().start('simulation');
+  const retry = render().retryUnsavedGame();
+  try {
+    await entered.promise;
+    assert.equal(render().retryingSave, true);
+    await render().retryUnsavedGame();
+    assert.equal(writes, 2);
+  } finally {
+    finish.resolve();
+    await retry;
+  }
+  assert.equal(render().unsavedGame, null);
+  assert.equal(render().retryingSave, false);
+});

@@ -148,3 +148,40 @@ void test('a malformed historical provider ID requires explicit credentials', ()
   );
   assert.equal(needsResumeInput(restored, 'api'), true);
 });
+
+void test('a paused legacy run upgrades its working copy before the first save', async () => {
+  const old = newRecord(original, BASE_RULE, 53, 'simulation');
+  old.status = 'paused';
+  old.talkedTurn = old.state.turn;
+  delete old.publicTalkVersion;
+  delete old.runtime;
+  delete old.frozenMemories;
+  delete old.summaryJobs;
+  delete old.opportunityLog;
+  const before = structuredClone(old);
+  const snapshots: (typeof old)[] = [];
+  const result = await runGame(old, original, [], {
+    signal: AbortSignal.abort('user-pause'),
+    chat: true,
+    maxCalls: 71,
+    call: async () => {
+      throw new Error('unexpected model call');
+    },
+    save: async (game) => {
+      snapshots.push(structuredClone(game));
+    },
+    onUpdate: () => {},
+    saveMemory: async () => {},
+  });
+  assert.deepEqual(old, before);
+  assert.deepEqual(snapshots, [result]);
+  assert.equal(result.status, 'paused');
+  assert.equal(result.publicTalkVersion, 1);
+  assert.deepEqual(result.replies, [
+    original[old.state.activePlayerIndex].profile.id,
+  ]);
+  assert.deepEqual(result.runtime, { chat: true, maxCalls: 71 });
+  assert.deepEqual(result.frozenMemories, {});
+  assert.deepEqual(result.summaryJobs, []);
+  assert.deepEqual(result.opportunityLog, []);
+});
